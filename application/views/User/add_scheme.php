@@ -1,18 +1,11 @@
 <!DOCTYPE html>
 <html>
-<?php
-$page = "add_user";
-include('head.php');
-?>
+
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
   <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -47,52 +40,72 @@ include('head.php');
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form">
+              <?php if(isset($update)){ ?>
+                <form action="<?php echo base_url(); ?>User/update_scheme" method="post" enctype="multipart/form-data" role="form">
+                  <input type="hidden" name="scheme_info_id" value="<?php echo $scheme_info_id; ?>">
+              <?php }else{ ?>
+                <form action="<?php echo base_url(); ?>User/save_scheme" method="post" enctype="multipart/form-data" role="form">
+              <?php } ?>
                 <div class="card-body row">
                   <div class="form-group col-md-12">
-                    <select class="form-control select2 form-control-sm" title="Select Scheme Type" style="width: 100%;">
+                    <select class="form-control select2 form-control-sm" name="scheme_type_id" id="scheme_type_id" title="Select Scheme Type" style="width: 100%;">
                       <option selected="selected">Select Scheme Type </option>
+                      <?php foreach ($scheme_list as $scheme_list1) { ?>
+                            <option value="<?php echo $scheme_list1->scheme_type_id; ?>" <?php if(isset($scheme_type_id)){ if($scheme_list1->scheme_type_id == $scheme_type_id){ echo "selected"; } }  ?>><?php echo $scheme_list1->scheme_type_name; ?></option>
+                          <?php } ?>
+                    </select>
                     </select>
                   </div>
 
                   <div class="form-group col-md-12">
-                    <select class="form-control select2 form-control-sm" title="Select Newspaper" style="width: 100%;">
+                    <select class="form-control select2 form-control-sm" name="newspaper_id" id="newspaper_id" title="Select Newspaper" style="width: 100%;">
                       <option selected="selected">Select  Newspaper </option>
+                      <?php foreach ($newspaper_list as $newspaper_list1) { ?>
+                            <option value="<?php echo $newspaper_list1->newspaper_info_id; ?>" <?php if(isset($newspaper_info_id)){ if($newspaper_list1->newspaper_info_id == $newspaper_info_id){ echo "selected"; } }  ?>><?php echo $newspaper_list1->newspaper_info_name; ?></option>
+                          <?php } ?>
+                    </select>
                     </select>
                   </div>
 
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control"  name="" id="" title="Enter Scheme Name" placeholder="Enter Scheme Name">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <input type="text" class="form-control"  name="" id="" title="Month Count " placeholder="Month Count ">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <input type="text" class="form-control"  name="" id="" title="Scheme Booking Fee" placeholder="Scheme Booking Fee">
+                    <input type="text" class="form-control"  name="scheme_name" id="scheme_name" title="Enter Scheme Name" value="<?php if(isset($scheme_info_name)){ echo $scheme_info_name; } ?>" placeholder="Enter Scheme Name">
                   </div>
 
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control"  name="" id="" title="Scheme Monthly Fee" placeholder="Scheme Monthly Fee">
+                    <input type="number" class="form-control"  name="month_count" id="month_count" title="Month Count " value="<?php if(isset($month_count)){ echo $month_count; } ?>" placeholder="Month Count ">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="number" class="form-control"  name="booking_fee" id="booking_fee" title="Scheme Booking Fee" value="<?php if(isset($booking_fee)){ echo $booking_fee; } ?>" placeholder="Scheme Booking Fee">
                   </div>
 
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control"  name="" id="" title="Enter Gift Count" placeholder="Enter Gift Count">
+                    <input type="number" class="form-control"  name="scheme_fee" id="scheme_fee" title="Scheme Monthly Fee" value="<?php if(isset($scheme_fee)){ echo $scheme_fee; } ?>" placeholder="Scheme Monthly Fee">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <input type="number" class="form-control"  name="gift_count" id="gift_count" title="Enter Gift Count" value="<?php if(isset($gift_count)){ echo $gift_count; } ?>" placeholder="Enter Gift Count">
                   </div>
                 </div>
+
+
 
                 <div class="form-group col-md-6">
                   <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Deactive This Scheme</label>
+                    <input type="checkbox" name="scheme_info_status" <?php if(isset($scheme_status)&& $scheme_status!='') { echo 'checked'; } ?> value="deactivate" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label"  for="exampleCheck1">Deactive This Scheme</label>
                   </div>
                 </div>
 
+
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-success px-4">Add </button>
-
-                  <button type="submit" class="btn btn-default ml-4">Cancel</button>
-                </div>
+                    <?php if(isset($update)){ ?>
+                      <button type="submit" class="btn btn-primary">Update</button>
+                    <?php }else{ ?>
+                      <button type="submit" class="btn btn-success">Add</button>
+                    <?php } ?>
+                    <a href="<?php echo base_url(); ?>/User/dashboard" class="btn btn-default ml-4">Cancel</a>
+                  </div>
               </form>
             </div>
 
@@ -106,16 +119,6 @@ include('head.php');
     </section>
   </div>
   <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include('script.php') ?>
 </body>
 </html>

@@ -146,4 +146,27 @@ public function get_delivery_details($company_id, $id){
      return $result;
     }
 
+    public function get_scheme_list($company_id){
+    $query = $this->db->select('scheme_info.*, scheme_type.*,newspaper_info.*')
+    ->from('scheme_info')
+    ->where('scheme_info.company_id', $company_id)
+     ->join('scheme_type', 'scheme_type.scheme_type_id = scheme_info.scheme_type_id', 'LEFT')
+     ->join('newspaper_info', 'newspaper_info.newspaper_info_id = scheme_info.newspaper_info_id', 'LEFT')
+     ->get();
+     $result = $query->result();
+     return $result;
+    }
+
+    public function get_scheme_details($company_id, $id){
+      $query = $this->db->select('scheme_info.*, scheme_type.*,newspaper_info.*')
+      ->from('scheme_info')
+      ->where('scheme_info.company_id', $company_id)
+      ->where('scheme_info.scheme_info_id', $id)
+       ->join('scheme_type','scheme_type.scheme_type_id = scheme_info.scheme_type_id', 'LEFT')
+       ->join('newspaper_info', 'newspaper_info.newspaper_info_id = scheme_info.newspaper_info_id', 'LEFT')
+       ->get();
+       $result = $query->result();
+       return $result;
+      }
+
 }?>

@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
-<?php
-$page = "party_list";
-include('head.php');
-?>
+
 <style>
   td{
     padding:2px 10px !important;
@@ -12,10 +9,7 @@ include('head.php');
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
   <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -39,7 +33,7 @@ include('head.php');
             <div class="card-header">
               <h3 class="card-title"><i class="fa fa-list"></i>Scheme Information</h3>
               <div class="card-tools">
-                <a href="<?php echo base_url() ?>Admin/add_scheme" class="btn btn-sm btn-block btn-primary">Add Scheme</a>
+                <a href="<?php echo base_url() ?>User/add_scheme" class="btn btn-sm btn-block btn-primary">Add Scheme</a>
               </div>
             </div>
             <!-- /.card-header -->
@@ -49,24 +43,30 @@ include('head.php');
                 <tr>
                   <th>Sr. No.</th>
                   <th>Scheme Type</th>
-                  <th>Date</th>
+                  <th>Name</th>
                   <th>Qty</th>
                   <th>Total Amount</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
+                  <?php
+              $i=0;
+              foreach ($scheme_list as $scheme_list1) {
+              $i++;
+            ?>
                 <tr>
-                  <td>1</td>
-                  <td>1 </td>
-                  <td>1 </td>
-                  <td>1</td>
-                  <td>1</td>
+                  <td><?php echo $i; ?></td>
+                  <td><?php echo $scheme_list1->scheme_type_name; ?> </td>
+                  <td><?php echo $scheme_list1->scheme_info_name; ?> </td>
+                  <td><?php echo $scheme_list1->month_count; ?></td>
+                  <td><?php echo $scheme_list1->scheme_fee; ?></td>
                   <td>
-                    <a href=""> <i class="fa fa-edit"></i> </a>
-                    <a class="ml-4" href=""> <i class="fa fa-trash"></i> </a>
-                  </td>
+                      <a href="<?php echo base_url(); ?>User/edit_scheme/<?php echo $scheme_list1->scheme_info_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <a class="ml-4" href="<?php echo base_url(); ?>User/delete_scheme/<?php echo $scheme_list1->scheme_info_id; ?>" onclick="return confirm('Delete Confirm');"> <i class="fa fa-trash"></i> </a>
+                      </td>
                 </tr>
+                    <?php  }  ?>
               </table>
             </div>
             <!-- /.card-body -->
@@ -79,16 +79,6 @@ include('head.php');
     </section>
   </div>
   <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include('script.php') ?>
 </body>
 </html>

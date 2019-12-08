@@ -479,6 +479,126 @@ public function delete_lineboy($id){
     }
 
 
+    public function add_scheme(){
+      $user_id = $this->session->userdata('user_id');
+      $company_id = $this->session->userdata('company_id');
+      $roll_id = $this->session->userdata('roll_id');
+      if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+      $data['newspaper_list'] = $this->User_Model->get_list1('newspaper_info_id','ASC','newspaper_info');
+      $data['scheme_list'] = $this->User_Model->get_list1('scheme_type_id','ASC','scheme_type');
+      $this->load->view('Include/head',$data);
+      $this->load->view('Include/navbar',$data);
+     $this->load->view('User/add_scheme',$data);
+      $this->load->view('Include/footer',$data);
+    }
+    public function scheme_list(){
+      $user_id = $this->session->userdata('user_id');
+      $company_id = $this->session->userdata('company_id');
+      $roll_id = $this->session->userdata('roll_id');
+      if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+      $data['scheme_list'] = $this->User_Model->get_scheme_list($company_id);
+      $this->load->view('Include/head',$data);
+      $this->load->view('Include/navbar',$data);
+      $this->load->view('User/list_scheme',$data);
+      $this->load->view('Include/footer',$data);
+
+    }
+
+    public function save_scheme(){
+      $user_id = $this->session->userdata('user_id');
+      $company_id = $this->session->userdata('company_id');
+      $roll_id = $this->session->userdata('roll_id');
+      if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+        $scheme_info_name = $this->input->post('scheme_info_name');
+        $scheme_info_status = $this->input->post('scheme_info_status');
+        if(!isset($scheme_info_status)){ $scheme_info_status='active';}
+        $data = array(
+          'company_id' => $company_id,
+          'scheme_info_name' => $this->input->post('scheme_name'),
+          'scheme_type_id' => $this->input->post('scheme_type_id'),
+          'newspaper_info_id' => $this->input->post('newspaper_id'),
+          'month_count' => $this->input->post('month_count'),
+          'booking_fee' => $this->input->post('booking_fee'),
+          'scheme_fee' => $this->input->post('scheme_fee'),
+          'gift_count' => $this->input->post('gift_count'),
+          'scheme_info_status' => $scheme_info_status,
+        );
+        $check = $this->User_Model->check_duplication($company_id,$scheme_info_name,'scheme_info_name','scheme_info');
+        if($check){
+          header('location:'.base_url().'User/delivery_line');
+        }
+        else{
+          $this->User_Model->save_data('scheme_info', $data);
+          header('location:'.base_url().'User/scheme_list');
+        }
+      }
+
+
+      public function edit_scheme($id){
+        $user_id = $this->session->userdata('lineboy_id');
+        $company_id = $this->session->userdata('company_id');
+        $roll_id = $this->session->userdata('roll_id');
+        if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+          $dscheme_details= $this->User_Model->get_scheme_details($company_id,$id);
+            // $data['scheme_list'] = $this->User_Model->get_scheme_list($company_id);
+            $data['newspaper_list'] = $this->User_Model->get_list1('newspaper_info_id','ASC','newspaper_info');
+            $data['scheme_list'] = $this->User_Model->get_list1('scheme_type_id','ASC','scheme_type');
+          if($dscheme_details){
+            foreach($dscheme_details as $info){
+              $data['update'] = 'update';
+              $data['scheme_info_id'] = $info->scheme_info_id;
+              $data['scheme_info_name'] = $info->scheme_info_name;
+              $data['scheme_type_id'] = $info->scheme_type_id;
+              $data['scheme_type_name'] = $info->scheme_type_name;
+              $data['newspaper_info_name'] = $info->newspaper_info_name;
+              $data['newspaper_info_id'] = $info->newspaper_info_id;
+              $data['month_count'] = $info->month_count;
+              $data['booking_fee'] = $info->booking_fee;
+              $data['scheme_fee'] = $info->scheme_fee;
+              $data['gift_count'] = $info->gift_count;
+
+              // $data['colboyname'] = $info->colboyname;
+            }
+
+            $this->load->view('Include/head',$data);
+            $this->load->view('Include/navbar',$data);
+            $this->load->view('User/add_scheme',$data);
+            $this->load->view('Include/footer',$data);
+          }
+
+      }
+
+      public function update_scheme(){
+      $user_id = $this->session->userdata('lineboy_id');
+      $company_id = $this->session->userdata('company_id');
+      $roll_id = $this->session->userdata('roll_id');
+      if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+        $scheme_info_id = $this->input->post('scheme_info_id');
+        $data = array(
+          'scheme_info_name' => $this->input->post('scheme_name'),
+          'scheme_type_id' => $this->input->post('scheme_type_id'),
+          'newspaper_info_id' => $this->input->post('newspaper_id'),
+          'month_count' => $this->input->post('month_count'),
+          'booking_fee' => $this->input->post('booking_fee'),
+          'scheme_fee' => $this->input->post('scheme_fee'),
+          'gift_count' => $this->input->post('gift_count'),
+          'scheme_info_status' => $scheme_info_status,
+        );
+        $this->User_Model->update_info('scheme_info_id', $scheme_info_id, 'scheme_info', $data);
+        header('location:'.base_url().'User/scheme_list');
+
+      }
+    //  Delete Item Group
+      public function delete_scheme($id){
+      $user_id = $this->session->userdata('lineboy_id');
+      $company_id = $this->session->userdata('company_id');
+      $roll_id = $this->session->userdata('roll_id');
+      if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+        $this->User_Model->delete_info('scheme_info_id', $id, 'scheme_info');
+        header('location:'.base_url().'User/scheme_list');
+      }
+
+
 
    public function party_information(){
     $this->load->view('User/party_information');
@@ -510,12 +630,7 @@ public function purchase_list(){
 $this->load->view('User/list_purchase');
 }
 
-public function add_scheme(){
- $this->load->view('User/add_scheme');
-}
-public function scheme_list(){
-$this->load->view('User/list_scheme');
-}
+
 
 public function add_bill(){
  $this->load->view('User/add_generate_bill');

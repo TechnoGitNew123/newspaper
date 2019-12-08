@@ -109,14 +109,14 @@
               </li>
 
 
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="<?php echo base_url(); ?>User/paper_list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                     Paper Information
                   </p>
                 </a>
-              </li>
+              </li> -->
 
 
               <li class="nav-item">
