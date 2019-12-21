@@ -600,6 +600,141 @@ public function delete_lineboy($id){
 
 
 
+      public function add_customer(){
+        $user_id = $this->session->userdata('user_id');
+        $company_id = $this->session->userdata('company_id');
+        $roll_id = $this->session->userdata('roll_id');
+        if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+        $data['delivery_line_list'] = $this->User_Model->get_list1('delivery_line_id','ASC','delivery_line');
+        $data['ptype_list'] = $this->User_Model->get_list1('papertype_id','ASC','papertype');
+        $data['newspaper_list'] = $this->User_Model->get_list1('newspaper_info_id','ASC','newspaper_info');
+        $data['scheme_list'] = $this->User_Model->get_list1('scheme_info_id','ASC','scheme_info');
+
+        // $data['customer_list'] = $this->User_Model->get_list1('customer_type_id','ASC','customer_type');
+        $this->load->view('Include/head',$data);
+        $this->load->view('Include/navbar',$data);
+       $this->load->view('User/customer_info',$data);
+        $this->load->view('Include/footer',$data);
+      }
+      public function customer_information_list(){
+        $user_id = $this->session->userdata('user_id');
+        $company_id = $this->session->userdata('company_id');
+        $roll_id = $this->session->userdata('roll_id');
+        if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+       $data['customer_list'] = $this->User_Model->get_list1('customer_id','ASC','customer');
+        $this->load->view('Include/head',$data);
+        $this->load->view('Include/navbar',$data);
+        $this->load->view('User/customer_info_list',$data);
+        $this->load->view('Include/footer',$data);
+
+      }
+
+      public function save_customer(){
+        $user_id = $this->session->userdata('user_id');
+        $company_id = $this->session->userdata('company_id');
+        $roll_id = $this->session->userdata('roll_id');
+        if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+          $mobile = $this->input->post('mobile');
+          $data = array(
+            'company_id' => $company_id,
+            'delivery_line_id' => $this->input->post('delivery_line_id'),
+            'customer_name' => $this->input->post('customer_name'),
+            'customer_address' => $this->input->post('customer_address'),
+            'mobile' => $this->input->post('mobile'),
+            'email' => $this->input->post('email'),
+            'bill_send' => $this->input->post('bill_send'),
+            'delivery_charges' => $this->input->post('delivery_charges'),
+            'paperwise' => $this->input->post('paperwise'),
+            'opening_bal' => $this->input->post('opening_bal'),
+            'advance' => $this->input->post('advance'),
+          );
+          $check = $this->User_Model->check_duplication($company_id,$mobile,'mobile','customer');
+          if($check){
+            header('location:'.base_url().'User/add_customer');
+          }
+          else{
+            $customer_id=$this->User_Model->save_data('customer', $data);
+
+            foreach($_POST['input1'] as $user)
+              {
+                $user['customer_id'] = $customer_id;
+                $this->db->insert('customer_pdetails', $user);
+              }
+              foreach($_POST['input2'] as $user2)
+                {
+                  $user2['customer_id'] = $customer_id;
+                  $this->db->insert('customer_schdetails', $user2);
+                }
+            header('location:'.base_url().'User/customer_information_list');
+          }
+        }
+      //
+      //
+      //   public function edit_customer($id){
+      //     $user_id = $this->session->userdata('lineboy_id');
+      //     $company_id = $this->session->userdata('company_id');
+      //     $roll_id = $this->session->userdata('roll_id');
+      //     if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+      //       $dcustomer_details= $this->User_Model->get_customer_details($company_id,$id);
+      //         // $data['customer_list'] = $this->User_Model->get_customer_list($company_id);
+      //         $data['newspaper_list'] = $this->User_Model->get_list1('newspaper_info_id','ASC','newspaper_info');
+      //         $data['customer_list'] = $this->User_Model->get_list1('customer_type_id','ASC','customer_type');
+      //       if($dcustomer_details){
+      //         foreach($dcustomer_details as $info){
+      //           $data['update'] = 'update';
+      //           $data['customer_info_id'] = $info->customer_info_id;
+      //           $data['customer_info_name'] = $info->customer_info_name;
+      //           $data['customer_type_id'] = $info->customer_type_id;
+      //           $data['customer_type_name'] = $info->customer_type_name;
+      //           $data['newspaper_info_name'] = $info->newspaper_info_name;
+      //           $data['newspaper_info_id'] = $info->newspaper_info_id;
+      //           $data['month_count'] = $info->month_count;
+      //           $data['booking_fee'] = $info->booking_fee;
+      //           $data['customer_fee'] = $info->customer_fee;
+      //           $data['gift_count'] = $info->gift_count;
+      //
+      //           // $data['colboyname'] = $info->colboyname;
+      //         }
+      //
+      //         $this->load->view('Include/head',$data);
+      //         $this->load->view('Include/navbar',$data);
+      //         $this->load->view('User/add_customer',$data);
+      //         $this->load->view('Include/footer',$data);
+      //       }
+      //
+      //   }
+      //
+      //   public function update_customer(){
+      //   $user_id = $this->session->userdata('lineboy_id');
+      //   $company_id = $this->session->userdata('company_id');
+      //   $roll_id = $this->session->userdata('roll_id');
+      //   if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+      //     $customer_info_id = $this->input->post('customer_info_id');
+      //     $data = array(
+      //       'customer_info_name' => $this->input->post('customer_name'),
+      //       'customer_type_id' => $this->input->post('customer_type_id'),
+      //       'newspaper_info_id' => $this->input->post('newspaper_id'),
+      //       'month_count' => $this->input->post('month_count'),
+      //       'booking_fee' => $this->input->post('booking_fee'),
+      //       'customer_fee' => $this->input->post('customer_fee'),
+      //       'gift_count' => $this->input->post('gift_count'),
+      //       'customer_info_status' => $customer_info_status,
+      //     );
+      //     $this->User_Model->update_info('customer_info_id', $customer_info_id, 'customer_info', $data);
+      //     header('location:'.base_url().'User/customer_list');
+      //
+      //   }
+      // //  Delete Item Group
+      //   public function delete_customer($id){
+      //   $user_id = $this->session->userdata('lineboy_id');
+      //   $company_id = $this->session->userdata('company_id');
+      //   $roll_id = $this->session->userdata('roll_id');
+      //   if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+      //     $this->User_Model->delete_info('customer_info_id', $id, 'customer_info');
+      //     header('location:'.base_url().'User/customer_list');
+      //   }
+
+
    public function party_information(){
     $this->load->view('User/party_information');
   }
@@ -652,13 +787,10 @@ public function add_receipt(){
 public function receipt_list(){
 $this->load->view('User/list_receipt');
 }
-  public function add_customer(){
-   $this->load->view('User/customer_info');
-  }
 
-  public function customer_information_list(){
-   $this->load->view('User/customer_info_list');
-  }
+  // public function customer_information_list(){
+  //  $this->load->view('User/customer_info_list');
+  // }
 
   public function add_user(){
    $this->load->view('User/add_user');

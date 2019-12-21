@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2019 at 07:06 AM
+-- Generation Time: Dec 21, 2019 at 07:45 AM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -77,6 +77,91 @@ CREATE TABLE `company` (
 
 INSERT INTO `company` (`company_id`, `company_name`, `company_address`, `company_city`, `company_state`, `company_district`, `company_statecode`, `company_mob1`, `company_mob2`, `company_email`, `company_website`, `company_pan_no`, `company_gst_no`, `company_lic1`, `company_lic2`, `company_start_date`, `company_end_date`, `company_logo`, `admin_roll_id`, `date`) VALUES
 (3, 'Pudhari', 'Bhausingji Road  Karvir', 'kolhapur', '27', 'kolhapur', 27, '9876543210', '9876543210', 'root@gmail.com', 'abd.com', '124578', '1245678', '12457', '1245', '01-04-2019', '07-12-2019', '', 1, '2019-12-07 05:56:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+CREATE TABLE `customer` (
+  `customer_id` bigint(20) NOT NULL,
+  `company_id` bigint(20) NOT NULL,
+  `delivery_line_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(250) DEFAULT NULL,
+  `customer_address` varchar(250) DEFAULT NULL,
+  `mobile` varchar(20) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `bill_send` varchar(50) DEFAULT NULL,
+  `delivery_charges` double DEFAULT NULL,
+  `paperwise` varchar(20) DEFAULT NULL,
+  `opening_bal` double DEFAULT NULL,
+  `advance` double DEFAULT NULL,
+  `customer_status` varchar(50) NOT NULL DEFAULT 'active',
+  `customer_addedby` varchar(50) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`customer_id`, `company_id`, `delivery_line_id`, `customer_name`, `customer_address`, `mobile`, `email`, `bill_send`, `delivery_charges`, `paperwise`, `opening_bal`, `advance`, `customer_status`, `customer_addedby`, `date`) VALUES
+(1, 1, 1, 'dhananjay', 'kolhapur', '9876543210', 'demo@mail.com', 'sms', 20, 'all', 100, 50, 'active', NULL, '2019-12-12 09:26:39'),
+(2, 1, 2, 'datta', 'kolhapur', '9096320276', 'tech@demo.com', 'email', 30, 'paperwise', 200, 50, 'active', NULL, '2019-12-12 10:04:03'),
+(3, 1, 1, 'saurabh', 'Satara', '9021182154', 'technothinksup@gmail.com', 'sms', 50, 'paperwise', 10000, 5000, 'active', NULL, '2019-12-12 10:08:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_pdetails`
+--
+
+CREATE TABLE `customer_pdetails` (
+  `customer_pdetails_id` bigint(20) NOT NULL,
+  `customer_id` bigint(20) NOT NULL,
+  `company_id` bigint(20) NOT NULL,
+  `papertype_id` bigint(20) NOT NULL,
+  `newspaper_info_id` bigint(20) NOT NULL,
+  `s_date` varchar(250) DEFAULT NULL,
+  `e_date` varchar(50) DEFAULT NULL,
+  `customer_addedby` varchar(50) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `customer_pdetails`
+--
+
+INSERT INTO `customer_pdetails` (`customer_pdetails_id`, `customer_id`, `company_id`, `papertype_id`, `newspaper_info_id`, `s_date`, `e_date`, `customer_addedby`, `date`) VALUES
+(1, 2, 0, 1, 1, '12-12-2019', '', NULL, '2019-12-12 10:04:03'),
+(2, 3, 0, 2, 1, '12-12-2019', '', NULL, '2019-12-12 10:08:25');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_schdetails`
+--
+
+CREATE TABLE `customer_schdetails` (
+  `customer_schdetails_id` bigint(20) NOT NULL,
+  `customer_id` bigint(20) NOT NULL,
+  `company_id` bigint(20) NOT NULL,
+  `scheme_info_id` bigint(20) NOT NULL,
+  `qty` varchar(250) DEFAULT NULL,
+  `s_date` varchar(250) DEFAULT NULL,
+  `e_date` varchar(250) DEFAULT NULL,
+  `customer_addedby` varchar(50) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `customer_schdetails`
+--
+
+INSERT INTO `customer_schdetails` (`customer_schdetails_id`, `customer_id`, `company_id`, `scheme_info_id`, `qty`, `s_date`, `e_date`, `customer_addedby`, `date`) VALUES
+(1, 2, 0, 4, NULL, NULL, NULL, NULL, '2019-12-12 10:04:03'),
+(2, 3, 0, 4, '50', '20', '30', NULL, '2019-12-12 10:08:25');
 
 -- --------------------------------------------------------
 
@@ -289,6 +374,24 @@ ALTER TABLE `company`
   ADD PRIMARY KEY (`company_id`);
 
 --
+-- Indexes for table `customer`
+--
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`customer_id`);
+
+--
+-- Indexes for table `customer_pdetails`
+--
+ALTER TABLE `customer_pdetails`
+  ADD PRIMARY KEY (`customer_pdetails_id`);
+
+--
+-- Indexes for table `customer_schdetails`
+--
+ALTER TABLE `customer_schdetails`
+  ADD PRIMARY KEY (`customer_schdetails_id`);
+
+--
 -- Indexes for table `delivery_line`
 --
 ALTER TABLE `delivery_line`
@@ -351,6 +454,24 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `company`
   MODIFY `company_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `customer`
+--
+ALTER TABLE `customer`
+  MODIFY `customer_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `customer_pdetails`
+--
+ALTER TABLE `customer_pdetails`
+  MODIFY `customer_pdetails_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `customer_schdetails`
+--
+ALTER TABLE `customer_schdetails`
+  MODIFY `customer_schdetails_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `delivery_line`

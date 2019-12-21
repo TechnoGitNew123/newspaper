@@ -66,7 +66,17 @@
   });
   $('#date2').datetimepicker({
     format: 'DD-MM-Y'
-  })
+  });
+  $('#date3').datetimepicker({
+    format: 'DD-MM-Y'
+  });
+  $('#date4').datetimepicker({
+    format: 'DD-MM-Y'
+  });
+
+  $('#datemask2').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+  $('#datemask3').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+  $('#datemask4').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
 </script>
 <script>
   $(function () {

@@ -169,4 +169,7 @@ public function get_delivery_details($company_id, $id){
        return $result;
       }
 
+    
+
+
 }?>

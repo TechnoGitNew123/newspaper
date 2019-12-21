@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
-<?php
-$page = "party_list";
-include('head.php');
-?>
+
 <style>
   td{
     padding:2px 10px !important;
@@ -12,10 +9,7 @@ include('head.php');
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
   <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -39,7 +33,7 @@ include('head.php');
             <div class="card-header">
               <h3 class="card-title"><i class="fa fa-list"></i> List Customer Information</h3>
               <div class="card-tools">
-                <a href="<?php echo base_url(); ?>Admin/add_customer" class="btn btn-sm btn-block btn-primary">Add Customer</a>
+                <a href="<?php echo base_url(); ?>User/add_customer" class="btn btn-sm btn-block btn-primary">Add Customer</a>
               </div>
             </div>
             <!-- /.card-header -->
@@ -51,27 +45,32 @@ include('head.php');
                   <th>Customer Name</th>
                   <th>Address</th>
                   <th>Mob. No.</th>
-                  <th>whatsup No.</th>
                   <th>Bill Send Type</th>
                   <th>Delivery Charges</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
+                  <?php
+              $i=0;
+              foreach ($customer_list as $customer_list1) {
+              $i++;
+            ?>
                 <tr>
-                  <td>1</td>
-                  <td>ABC </td>
-                  <td>Rajarampuri Kolhapur</td>
-                  <td>9876543210</td>
-                  <td>9876543210</td>
-                  <td>SMS</td>
-                  <td>25</td>
-
+                  <td><?php echo $i; ?></td>
+                  <td><?php echo $customer_list1->customer_name; ?></td>
+                  <td><?php echo $customer_list1->customer_address; ?></td>
+                  <td><?php echo $customer_list1->mobile; ?></td>
+                  <td><?php echo $customer_list1->bill_send; ?></td>
+                  <td><?php echo $customer_list1->delivery_charges; ?></td>
+                  <td><?php echo $customer_list1->customer_status; ?></td>
                   <td>
-                    <a href=""> <i class="fa fa-edit"></i> </a>
-                    <a class="ml-4" href=""> <i class="fa fa-trash"></i> </a>
-                  </td>
+                      <a href="<?php echo base_url(); ?>User/edit_customer/<?php echo $customer_list1->customer_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <a class="ml-4" href="<?php echo base_url(); ?>User/delete_customer/<?php echo $customer_list1->customer_id; ?>" onclick="return confirm('Delete Confirm');"> <i class="fa fa-trash"></i> </a>
+                      </td>
                 </tr>
+                  <?php  }  ?>
               </table>
             </div>
             <!-- /.card-body -->
@@ -84,16 +83,6 @@ include('head.php');
     </section>
   </div>
   <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include('script.php') ?>
 </body>
 </html>
