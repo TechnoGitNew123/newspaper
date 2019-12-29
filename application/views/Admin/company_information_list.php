@@ -11,14 +11,11 @@ include('head.php');
 </style>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
   <!-- Navbar -->
   <?php include('navbar.php'); ?>
   <!-- /.navbar -->
-
   <!-- Main Sidebar Container -->
   <?php include('sidebar.php'); ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -31,9 +28,6 @@ include('head.php');
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
-
-
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -46,7 +40,6 @@ include('head.php');
               <div class="card-tools">
                 <a href="<?php echo base_url(); ?>Admin/company_information" class="btn btn-sm btn-block btn-primary">Add Company</a>
               </div>
-
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -54,7 +47,12 @@ include('head.php');
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Company Name</th>
+                  <th>Business Name</th>
+                  <th>Owner Name</th>
+                  <th>City</th>
+                  <th>Mobile No.</th>
+                  <th>Registration Date</th>
+                  <th>Subscription Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -67,6 +65,15 @@ include('head.php');
                     <tr>
                       <td><?php echo $i; ?></td>
                       <td><?php echo $list->company_name; ?></td>
+                      <td><?php echo $list->c_name; ?></td>
+                      <td><?php echo $list->company_city; ?></td>
+                      <td><?php echo $list->company_mob1; ?></td>
+                      <td><?php echo $list->company_reg_date; ?></td>
+                      <td>
+                          <b class="<?php if($list->company_status == 'Active'){ echo 'badge bg-success'; } else{ echo 'badge bg-danger'; } ?>" > 
+                            <?php echo $list->company_status; ?>
+                          <b>
+                      </td>
                       <td>
                         <a href="<?php echo base_url(); ?>Admin/edit_company/<?php echo $list->company_id; ?>"> <i class="fa fa-edit"></i> </a>
                         <a href="<?php echo base_url(); ?>Admin/delete_company/<?php echo $list->company_id; ?>" onclick="return confirm('Delete this Company');" class="ml-4"> <i class="fa fa-trash"></i> </a>
@@ -76,6 +83,9 @@ include('head.php');
                 </tbody>
               </table>
             </div>
+
+
+      <!-- /.modal -->
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
@@ -97,5 +107,18 @@ include('head.php');
 <!-- ./wrapper -->
 
 <?php include('script.php') ?>
+<script type="text/javascript">
+$(document).ready(function(){
+  // $('.bootstrap-switch-success').text('Active');
+  // $('.bootstrap-switch-danger').text('Inactive');
+});
+$("input[data-bootstrap-switch]").click(function(){
+  // if(this.checked) {
+  //   alert();
+  // }
+  // alert();
+    // $(this).bootstrapSwitch('state', $(this).prop('checked'));
+  });
+</script>
 </body>
 </html>

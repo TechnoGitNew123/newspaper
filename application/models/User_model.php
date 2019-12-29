@@ -31,10 +31,10 @@ class User_Model extends CI_Model{
 
   public function get_list($company_id,$id,$order,$tbl_name){
     $query = $this->db->select('*')
-            ->where('company_id', $company_id)
-            ->order_by($id, $order)
-            ->from($tbl_name)
-            ->get();
+    ->where('company_id', $company_id)
+    ->order_by($id, $order)
+    ->from($tbl_name)
+    ->get();
     $result = $query->result();
     return $result;
   }
@@ -42,6 +42,15 @@ class User_Model extends CI_Model{
   public function get_list1($id,$order,$tbl_name){
     $query = $this->db->select('*')
             ->order_by($id, $order)
+            ->from($tbl_name)
+            ->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  public function get_child_list($column_name,$column_val,$tbl_name){
+    $query = $this->db->select('*')
+            ->where($column_name, $column_val)
             ->from($tbl_name)
             ->get();
     $result = $query->result();
@@ -86,6 +95,49 @@ class User_Model extends CI_Model{
     return $result;
   }
 
+  public function check_dupli_num($company_id,$value,$field_name,$table_name){
+    $this->db->select($field_name);
+    if($company_id != ''){
+      $this->db->where('company_id', $company_id);
+    }
+    $this->db->where($field_name,$value);
+    $this->db->from($table_name);
+    $query = $this->db->get();
+    $num = $query->num_rows();
+    return $num;
+  }
+
+  public function get_dash_cnt($company_id, $field_id, $table_name){
+    $this->db->select($field_id);
+    $this->db->where('company_id',$company_id);
+    $this->db->from($table_name);
+    $query =  $this->db->get();
+    $result = $query->num_rows();
+    return $result;
+  }
+
+
+
+
+
+  public function check_is_yearly_scheme($scheme_info_id){
+    $this->db->select('*');
+    $this->db->where('scheme_info_id',$scheme_info_id);
+    $this->db->from('scheme_info');
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result;
+  }
+
+  public function check_password($user_id,$old_password){
+    $this->db->select('user_id');
+    $this->db->where('user_id',$user_id);
+    $this->db->where('user_password',$old_password);
+    $this->db->from('user');
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result;
+  }
 
 
   public function get_user_list($company_id){
@@ -121,7 +173,6 @@ public function get_delivery_details($company_id, $id){
    $result = $query->result();
    return $result;
   }
-
 
   public function get_newspaper_list($company_id){
   $query = $this->db->select('news.*, papertype.*,language.*')
@@ -167,9 +218,9 @@ public function get_delivery_details($company_id, $id){
        ->get();
        $result = $query->result();
        return $result;
-      }
+    }
 
-    
+
 
 
 }?>

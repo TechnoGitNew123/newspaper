@@ -1,9 +1,5 @@
 <!DOCTYPE html>
 <html>
-<?php
-$page = "party_list";
-include('head.php');
-?>
 <style>
   td{
     padding:2px 10px !important;
@@ -11,11 +7,6 @@ include('head.php');
 </style>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -23,7 +14,7 @@ include('head.php');
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>DELIVERY CHALLAN LIST </h4>
+            <h4>Bill Cycle List</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -37,9 +28,9 @@ include('head.php');
             <!-- general form elements -->
             <div class="card">
             <div class="card-header">
-              <h3 class="card-title"><i class="fa fa-list"></i>Delivery Challan List</h3>
+              <h3 class="card-title"><i class="fa fa-list"></i> Bill Cycle List</h3>
               <div class="card-tools">
-                <a href="<?php echo base_url() ?>Transactional/delivery_challan" class="btn btn-sm btn-block btn-primary">Add Delivery challan</a>
+                <a href="<?php echo base_url() ?>Transaction/add_bill_cycle" class="btn btn-sm btn-block btn-primary">Add Bill Cycle</a>
               </div>
             </div>
             <!-- /.card-header -->
@@ -48,29 +39,28 @@ include('head.php');
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>DC No</th>
-                  <th>DC Date</th>
-                  <th>Party No</th>
-                  <th>Basic Amount</th>
-                  <th>GST Amount</th>
-                  <th>Net Amount</th>
+                  <th>Name</th>
+                  <th>From </th>
+                  <th>To</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>II</td>
-                  <td>II</td>
-                  <td>II</td>
-                  <td>II</td>
-                  <td>II</td>
-                  <td>II</td>
-                  <td>
-                    <a href=""> <i class="fa fa-edit"></i> </a>
-                    <a class="ml-4" href=""> <i class="fa fa-trash"></i> </a>
-                  </td>
-                </tr>
+                  <?php $i = 0;
+                  foreach ($bill_cycle_list as $list) {
+                    $i++;
+                  ?>
+                  <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $list->bill_cycle_name; ?></td>
+                    <td><?php echo $list->bill_cycle_from; ?></td>
+                    <td><?php echo $list->bill_cycle_to; ?></td>
+                    <td>
+                      <a href="<?php echo base_url(); ?>Transaction/edit_bill_cycle/<?php echo $list->bill_cycle_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <a class="ml-2" href="<?php echo base_url(); ?>Transaction/delete_bill_cycle/<?php echo $list->bill_cycle_id; ?>" onclick="return confirm('Delete this Bill Cycle');"> <i class="fa fa-trash"></i> </a>
+                    </td>
+                  </tr>
+                  <?php } ?>
               </table>
             </div>
             <!-- /.card-body -->
@@ -82,17 +72,5 @@ include('head.php');
       </div><!-- /.container-fluid -->
     </section>
   </div>
-  <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include('script.php') ?>
 </body>
 </html>

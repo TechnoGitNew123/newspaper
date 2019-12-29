@@ -1,9 +1,5 @@
 <!DOCTYPE html>
 <html>
-<?php
-$page = "party_list";
-include('head.php');
-?>
 <style>
   td{
     padding:2px 10px !important;
@@ -11,11 +7,6 @@ include('head.php');
 </style>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -23,7 +14,7 @@ include('head.php');
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>Purchase Information</h4>
+            <h4>Supplier Information</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -37,9 +28,9 @@ include('head.php');
             <!-- general form elements -->
             <div class="card">
             <div class="card-header">
-              <h3 class="card-title"><i class="fa fa-list"></i>Purchase Information</h3>
+              <h3 class="card-title"><i class="fa fa-list"></i>Supplier Information</h3>
               <div class="card-tools">
-                <a href="<?php echo base_url() ?>Admin/add_purchase" class="btn btn-sm btn-block btn-primary">Add Purchase</a>
+                <a href="<?php echo base_url() ?>User/add_supplier" class="btn btn-sm btn-block btn-primary">Add Supplier</a>
               </div>
             </div>
             <!-- /.card-header -->
@@ -48,25 +39,28 @@ include('head.php');
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Purchase Type</th>
-                  <th>Purchase Date</th>
-                  <th>Qty</th>
-                  <th>Total Amount</th>
+                  <th>Supplier Name</th>
+                  <th>Mobile</th>
+                  <th>City</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>1 </td>
-                  <td>1 </td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>
-                    <a href=""> <i class="fa fa-edit"></i> </a>
-                    <a class="ml-4" href=""> <i class="fa fa-trash"></i> </a>
-                  </td>
-                </tr>
+                  <?php $i = 0;
+                  foreach ($supplier_list as $list) {
+                    $i++;
+                  ?>
+                  <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $list->supplier_name; ?></td>
+                    <td><?php echo $list->supplier_mobile; ?></td>
+                    <td><?php echo $list->supplier_city; ?></td>
+                    <td>
+                      <a href="<?php echo base_url(); ?>User/edit_supplier/<?php echo $list->supplier_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <a class="ml-2" href="<?php echo base_url(); ?>User/delete_supplier/<?php echo $list->supplier_id; ?>" onclick="return confirm('Delete this Expense');"> <i class="fa fa-trash"></i> </a>
+                    </td>
+                  </tr>
+                  <?php } ?>
               </table>
             </div>
             <!-- /.card-body -->
@@ -78,17 +72,5 @@ include('head.php');
       </div><!-- /.container-fluid -->
     </section>
   </div>
-  <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include('script.php') ?>
 </body>
 </html>

@@ -62,7 +62,7 @@
                   <td><?php echo $customer_list1->customer_name; ?></td>
                   <td><?php echo $customer_list1->customer_address; ?></td>
                   <td><?php echo $customer_list1->mobile; ?></td>
-                  <td><?php echo $customer_list1->bill_send; ?></td>
+                  <td><?php echo $customer_list1->bill_send_sms; ?> <?php echo $customer_list1->bill_send_email; ?></td>
                   <td><?php echo $customer_list1->delivery_charges; ?></td>
                   <td><?php echo $customer_list1->customer_status; ?></td>
                   <td>

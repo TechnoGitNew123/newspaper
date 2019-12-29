@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html>
-
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
   <!-- Navbar -->
-
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -16,18 +12,9 @@
           <div class="col-sm-12 text-center mt-2">
             <h1>Scheme Information</h1>
           </div>
-          <!-- <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
-            </ol>
-          </div> -->
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
-
-
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -66,36 +53,37 @@
                     </select>
                     </select>
                   </div>
-
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control"  name="scheme_name" id="scheme_name" title="Enter Scheme Name" value="<?php if(isset($scheme_info_name)){ echo $scheme_info_name; } ?>" placeholder="Enter Scheme Name">
                   </div>
-
                   <div class="form-group col-md-6">
                     <input type="number" class="form-control"  name="month_count" id="month_count" title="Month Count " value="<?php if(isset($month_count)){ echo $month_count; } ?>" placeholder="Month Count ">
                   </div>
                   <div class="form-group col-md-6">
                     <input type="number" class="form-control"  name="booking_fee" id="booking_fee" title="Scheme Booking Fee" value="<?php if(isset($booking_fee)){ echo $booking_fee; } ?>" placeholder="Scheme Booking Fee">
                   </div>
-
                   <div class="form-group col-md-6">
                     <input type="number" class="form-control"  name="scheme_fee" id="scheme_fee" title="Scheme Monthly Fee" value="<?php if(isset($scheme_fee)){ echo $scheme_fee; } ?>" placeholder="Scheme Monthly Fee">
                   </div>
-
                   <div class="form-group col-md-6">
                     <input type="number" class="form-control"  name="gift_count" id="gift_count" title="Enter Gift Count" value="<?php if(isset($gift_count)){ echo $gift_count; } ?>" placeholder="Enter Gift Count">
                   </div>
-                </div>
-
-
-
-                <div class="form-group col-md-6">
-                  <div class="form-check">
-                    <input type="checkbox" name="scheme_info_status" <?php if(isset($scheme_status)&& $scheme_status!='') { echo 'checked'; } ?> value="deactivate" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label"  for="exampleCheck1">Deactive This Scheme</label>
+                  <div class="form-group col-md-4">
+                    Include in Monthly Bill :
+                  </div>
+                  <div class="form-group col-md-1">
+                    <input type="radio" name="is_monthly_bill" id="use_monthly_yes" <?php if(isset($is_monthly_bill) && $is_monthly_bill == 'Yes'){ echo 'checked'; } ?> value="Yes"> Yes
+                  </div>
+                  <div class="form-group col-md-1">
+                    <input type="radio" name="is_monthly_bill" id="use_monthly_no" value="No" <?php if(isset($is_monthly_bill) && $is_monthly_bill == 'No'){ echo 'checked'; } elseif(!isset($is_monthly_bill)){ echo 'checked'; } ?>> No
+                  </div>
+                  <div class="form-group col-md-12">
+                    <div class="form-check">
+                      <input type="checkbox" name="scheme_info_status" <?php if(isset($scheme_status)&& $scheme_status!='') { echo 'checked'; } ?> value="deactivate" class="form-check-input" id="exampleCheck1">
+                      <label class="form-check-label"  for="exampleCheck1">Deactive This Scheme</label>
+                    </div>
                   </div>
                 </div>
-
 
                 <!-- /.card-body -->
                 <div class="card-footer">
@@ -108,7 +96,6 @@
                   </div>
               </form>
             </div>
-
           </div>
           <!--/.col (left) -->
           <!-- right column -->
@@ -119,6 +106,28 @@
     </section>
   </div>
   <!-- /.content-wrapper -->
+  <script type="text/javascript">
+    $('#scheme_type_id').on('change', function(){
+      var scheme_type =  $(this).find("option:selected").text();
+      if(scheme_type == 'Yearly'){
+        $('#scheme_fee').val('');
+        $('#scheme_fee').attr('readonly',true);
+      }
+      else{
+        $('#scheme_fee').attr('readonly',false);
+      }
+    });
 
+    $(document).ready(function(){
+      var scheme_type =  $('#scheme_type_id').find("option:selected").text();
+      if(scheme_type == 'Yearly'){
+        $('#scheme_fee').val('');
+        $('#scheme_fee').attr('readonly',true);
+      }
+      else{
+        $('#scheme_fee').attr('readonly',false);
+      }
+    })
+  </script>
 </body>
 </html>

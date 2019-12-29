@@ -1,19 +1,7 @@
 <!DOCTYPE html>
 <html>
-<?php
-$page = "add_user";
-include('head.php');
-?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
-  <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -23,18 +11,9 @@ include('head.php');
           <div class="col-sm-12 text-center mt-2">
             <h1>Change Password</h1>
           </div>
-          <!-- <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
-            </ol>
-          </div> -->
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
-
-
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -45,20 +24,16 @@ include('head.php');
               <div class="card-header">
                 <h3 class="card-title"> Change Password</h3>
               </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form role="form">
+              <form role="form" method="post" autocomplete="off">
                 <div class="card-body row">
-
-
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control"  name="" id="" title="Enter Old Password" placeholder="Enter  Old Password">
+                    <input type="password" class="form-control"  name="old_password" id="old_password" title="Enter Old Password" placeholder="Enter  Old Password" required>
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control"  name="" id="" title="Enter New Password" placeholder="Enter  New Password">
+                    <input type="password" class="form-control"  name="new_password" id="new_password" title="Enter New Password" placeholder="Enter  New Password" required>
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control"  name="" id="" title="Confirm Password" placeholder="Confirm Password">
+                    <input type="password" class="form-control"  name="con_password" id="con_password" title="Confirm Password" placeholder="Confirm Password" required>
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -67,31 +42,31 @@ include('head.php');
                     <button type="submit" class="btn btn-success px-4">Save </button>
                     <button type="submit" class="btn btn-default ml-4">Cancel</button>
                   </div>
-
                 </div>
               </form>
             </div>
-
           </div>
-          <!--/.col (left) -->
-          <!-- right column -->
-          <!--/.col (right) -->
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
   </div>
-  <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
+  <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/plugins/toastr/toastr.min.js"></script>
+  <?php if($this->session->flashdata('con_error') == 'Confirm_Error'){ ?>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        toastr.error('Password Not Matched.');
+      });
+    </script>
+  <?php } ?>
+  <?php if($this->session->flashdata('pas_error') == 'Pass_Error'){ ?>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        toastr.error('Invalid Old Password.');
+      });
+    </script>
+  <?php } ?>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include('script.php') ?>
 </body>
 </html>

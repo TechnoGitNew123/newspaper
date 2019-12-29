@@ -70,6 +70,14 @@
 <script src="<?php echo base_url(); ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url(); ?>assets/dist/js/adminlte.min.js"></script>
-
+<script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/toastr/toastr.min.js"></script>
+<?php if($this->session->flashdata('pas_success') == 'Pass_Success'){ ?>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      toastr.success('Password Changed Successfully. Login with new Password');
+    });
+  </script>
+<?php } ?>
 </body>
 </html>

@@ -103,3 +103,22 @@
     $('.duallistbox').bootstrapDualListbox();
   })
 </script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    var url = window.location.href;
+    var activePage = url;
+    $('.nav-link').removeClass('active');
+    $('.has-treeview').removeClass('menu-open');
+    $('.nav-treeview').css("display", "none");
+    // alert(activePage);
+    $('.nav-link').each(function () {
+      var linkPage = this.href;
+      if (activePage == linkPage) {
+          $(this).closest(".nav-link").addClass("active");
+          $(this).closest(".has-treeview").addClass("menu-open");
+          $(this).closest(".has-treeview").find(".nav-treeview").css("display", "block");
+          $(this).closest(".has-treeview").find(".head").addClass("active");
+      }
+    });
+  });
+</script>

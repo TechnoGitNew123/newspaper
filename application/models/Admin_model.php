@@ -43,5 +43,31 @@ class Admin_Model extends CI_Model{
     $this->db->where($id_type, $id)
     ->delete($tbl_name);
   }
+
+  public function all_c_count(){
+    $this->db->select('company_id');
+    $this->db->from('company');
+    $query =  $this->db->get();
+    $result = $query->num_rows();
+    return $result;
+  }
+
+  public function active_c_count(){
+    $this->db->select('company_id');
+    $this->db->where('company_status','Active');
+    $this->db->from('company');
+    $query =  $this->db->get();
+    $result = $query->num_rows();
+    return $result;
+  }
+
+  public function inactive_c_count(){
+    $this->db->select('company_id');
+    $this->db->where('company_status','Inactive');
+    $this->db->from('company');
+    $query =  $this->db->get();
+    $result = $query->num_rows();
+    return $result;
+  }
 }
 ?>

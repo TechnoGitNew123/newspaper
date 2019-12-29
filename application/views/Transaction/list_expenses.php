@@ -1,9 +1,5 @@
 <!DOCTYPE html>
 <html>
-<?php
-$page = "party_list";
-include('head.php');
-?>
 <style>
   td{
     padding:2px 10px !important;
@@ -11,11 +7,6 @@ include('head.php');
 </style>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -23,7 +14,7 @@ include('head.php');
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>Bill INFORMATION</h4>
+            <h4>Expenses Information</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -37,9 +28,9 @@ include('head.php');
             <!-- general form elements -->
             <div class="card">
             <div class="card-header">
-              <h3 class="card-title"><i class="fa fa-list"></i>Bill Information</h3>
+              <h3 class="card-title"><i class="fa fa-list"></i>Expenses Information</h3>
               <div class="card-tools">
-                <a href="<?php echo base_url() ?>Admin/add_bill" class="btn btn-sm btn-block btn-primary">Add Bill</a>
+                <a href="<?php echo base_url() ?>Transaction/add_expenses" class="btn btn-sm btn-block btn-primary">Add Expenses</a>
               </div>
             </div>
             <!-- /.card-header -->
@@ -48,25 +39,28 @@ include('head.php');
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Bill Type</th>
-                  <th>Date</th>
-                  <th>Qty</th>
-                  <th>Total Amount</th>
+                  <th>Expenses Type</th>
+                  <th>Expenses Date</th>
+                  <th>Expenses Amount</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
+                <?php $i = 0;
+                foreach ($expenses_list as $list) {
+                  $i++;
+                ?>
                 <tr>
-                  <td>1</td>
-                  <td>1 </td>
-                  <td>1 </td>
-                  <td>1</td>
-                  <td>1</td>
+                  <td><?php echo $i; ?></td>
+                  <td><?php echo $list->expense_type_name; ?></td>
+                  <td><?php echo $list->expense_date; ?></td>
+                  <td><?php echo $list->expense_amount; ?></td>
                   <td>
-                    <a href=""> <i class="fa fa-edit"></i> </a>
-                    <a class="ml-4" href=""> <i class="fa fa-trash"></i> </a>
+                    <a href="<?php echo base_url(); ?>Transaction/edit_expense/<?php echo $list->expense_id; ?>"> <i class="fa fa-edit"></i> </a>
+                    <a class="ml-2" href="<?php echo base_url(); ?>Transaction/delete_expense/<?php echo $list->expense_id; ?>" onclick="return confirm('Delete this Expense');"> <i class="fa fa-trash"></i> </a>
                   </td>
                 </tr>
+                <?php } ?>
               </table>
             </div>
             <!-- /.card-body -->
@@ -78,17 +72,5 @@ include('head.php');
       </div><!-- /.container-fluid -->
     </section>
   </div>
-  <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include('script.php') ?>
 </body>
 </html>

@@ -1,19 +1,7 @@
 <!DOCTYPE html>
 <html>
-<?php
-$page = "add_user";
-include('head.php');
-?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
-  <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -23,18 +11,9 @@ include('head.php');
           <div class="col-sm-12 text-center mt-2">
             <h1>BILL CYCLE INFORMATION</h1>
           </div>
-          <!-- <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
-            </ol>
-          </div> -->
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
-
-
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -47,51 +26,34 @@ include('head.php');
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form">
+              <form role="form" method="post" autocomplete="off">
                 <div class="card-body row">
                   <div class="form-group col-md-12 ">
-                    <input type="text" class="form-control"  name="" id="" title="Bill Cycle Name" placeholder="Bill Cycle Name">
+                    <input type="text" class="form-control" name="bill_cycle_name" id="bill_cycle_name" value="<?php if(isset($bill_cycle_name)){ echo $bill_cycle_name; } ?>" title="Bill Cycle Name" placeholder="Bill Cycle Name" required>
                   </div>
-
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control"  name="" id="" title="From Date" placeholder="From Date">
+                    <input type="text" class="form-control" name="bill_cycle_from" id="date1" value="<?php if(isset($bill_cycle_from)){ echo $bill_cycle_from; } ?>" data-target="#date1" data-toggle="datetimepicker" title="From Date" placeholder="From Date" required>
                   </div>
-
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control"  name="" id="" title="To Date" placeholder="To Date">
+                    <input type="text" class="form-control" name="bill_cycle_to" id="date2" value="<?php if(isset($bill_cycle_to)){ echo $bill_cycle_to; } ?>" data-target="#date2" data-toggle="datetimepicker" title="To Date" placeholder="To Date" required>
                   </div>
-
                 </div>
-
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-success px-4">Add </button>
-
-                  <button type="submit" class="btn btn-default ml-4">Cancel</button>
+                  <?php if(isset($update)){ ?>
+                    <button type="submit" class="btn btn-primary px-4">Update </button>
+                  <?php } else{ ?>
+                    <button type="submit" class="btn btn-success px-4">Add </button>
+                  <?php } ?>
+                  <a href="" class="btn btn-default ml-4">Cancel</a>
                 </div>
               </form>
             </div>
-
           </div>
-          <!--/.col (left) -->
-          <!-- right column -->
-          <!--/.col (right) -->
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
   </div>
-  <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include('script.php') ?>
 </body>
 </html>

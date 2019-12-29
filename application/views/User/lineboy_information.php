@@ -3,9 +3,6 @@
 
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
-
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -15,12 +12,9 @@
           <div class="col-sm-12 text-center mt-2">
             <h1> Line Boy Information</h1>
           </div>
-
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
-
 
     <section class="content">
       <div class="container-fluid">
@@ -41,37 +35,29 @@
                 <form action="<?php echo base_url(); ?>User/save_lineboy" method="post" enctype="multipart/form-data" role="form">
               <?php } ?>
                 <div class="card-body row">
-
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control"  name="lineboy_name" id="lineboy_name" value="<?php if(isset($lineboy_name)){ echo $lineboy_name; } ?>" title="Enter Name" placeholder="Enter Name">
                   </div>
-                  <!-- <div class="form-group col-md-6">
-                    <input type="text" class="form-control"  name="" id="" title="Last Name" placeholder="Last Name">
-                  </div> -->
                   <div class="form-group col-md-12">
                     <textarea class="form-control" rows="3" name="lineboy_address" id="lineboy_address" title="Address" placeholder="Address"><?php if(isset($lineboy_address)){ echo $lineboy_address; } ?></textarea>
                   </div>
-
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control"  name="mobile1" id="mobile1" value="<?php if(isset($mobile1)){ echo $mobile1; } ?>" title="Mobile No. 1" placeholder="Mobile No. 1">
                   </div>
-
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control"  name="mobile2" id="mobile2" value="<?php if(isset($mobile2)){ echo $mobile2; } ?>" title="Mobile No. 2" placeholder="Mobile No. 2">
                   </div>
-
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control"  name="password" id="password" value="<?php if(isset($password)){ echo $password; } ?>" title="Password" placeholder="Password">
                   </div>
-
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control"  name="con_password" id="con_password" value="<?php if(isset($lineboy_name)){ echo $lineboy_name; } ?>" title="confirm Password" placeholder="confirm Password">
                   </div>
-
-
-
-                  <div class="form-group col-md-12">
+                  <div class="form-group col-md-6">
                     <input type="text" class="form-control"  name="salary" id="salary" title="Salary" value="<?php if(isset($salary)){ echo $salary; } ?>" placeholder="Salary">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="text" class="form-control" name="l_imei" id="l_imei" value="<?php if(isset($l_imei)){ echo $l_imei; } ?>"  placeholder="IMEI Number">
                   </div>
 
                   <div class="form-group col-md-6">
