@@ -147,6 +147,51 @@
             </li>
         </ul>
       </li>
+
+      <li class="nav-item has-treeview">
+        <a href="#" class="nav-link head">
+          <i class="nav-icon fas fa-chart-pie"></i>
+          <p>Report<i class="right fas fa-angle-left"></i></p>
+        </a>
+        <ul class="nav nav-treeview" style="display: none;">
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>Report/sale_report" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Sale Summary</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>Report/purchase_report" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Purchase Summary</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>Report/expense_report" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Expence Summary</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>Report/outstanding_report" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Outstanding Analysis</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>Report/receipt_report" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Receipt Summary</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>Report/profit_loss_report" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Profit & Loss Summary</p>
+            </a>
+          </li>
+      </ul>
+    </li>
     </nav>
     <!-- /.sidebar-menu -->
   </div>

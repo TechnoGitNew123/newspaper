@@ -328,6 +328,7 @@ class Transaction extends CI_Controller{
     $data['bill_cycle_list'] = $this->User_Model->get_list($company_id,'bill_cycle_id','ASC','bill_cycle');
     $data['delivery_line_list'] = $this->User_Model->get_list($company_id,'delivery_line_id','ASC','delivery_line');
     $data['customer_list'] = $this->User_Model->get_list($company_id,'customer_id','ASC','customer');
+    // echo $company_id;
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
     $this->load->view('Transaction/add_generate_bill',$data);
@@ -598,6 +599,11 @@ class Transaction extends CI_Controller{
     $out_amount = ($tot_bill + $opening_bal + $tot_sceme_amt) - ($tot_received + $advance);
     echo $out_amount;
   }
+
+
+  // public function gift_count(){
+  //
+  // }
 
 
 

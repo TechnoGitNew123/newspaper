@@ -115,7 +115,6 @@
                     </select>
                   </div>
 
-
                   <div class="form-group col-md-6">
                     <input type="number" class="form-control form-control-sm" name="tot_gros_amt" id="tot_gros_amt" value="<?php if(isset($tot_gros_amt)){ echo $tot_gros_amt; } ?>" title="Total Gross Amount" placeholder="Total Gross Amount">
                   </div>

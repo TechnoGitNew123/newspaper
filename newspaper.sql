@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 28, 2019 at 02:01 PM
+-- Generation Time: Jan 03, 2020 at 01:58 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.10
 
@@ -61,10 +61,19 @@ CREATE TABLE `bill` (
   `tot_gros_amt` double NOT NULL,
   `tot_del_charges` double NOT NULL,
   `tot_less_amt` double NOT NULL,
+  `tot_add_amt` double DEFAULT NULL,
   `tot_net_amt` double NOT NULL,
   `bill_addedby` varchar(50) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `bill`
+--
+
+INSERT INTO `bill` (`bill_id`, `company_id`, `bill_no`, `bill_date`, `bill_cycle_id`, `delivery_line_id`, `customer_id`, `del_charges`, `paper_wise`, `tot_gros_amt`, `tot_del_charges`, `tot_less_amt`, `tot_add_amt`, `tot_net_amt`, `bill_addedby`, `date`) VALUES
+(1, 3, 1, '01-12-2019', 2, 1, 1, 0, 'Per Paper Wise', 500, 50, 0, 0, 550, '5', '2019-12-29 05:17:29'),
+(5, 3, 3, '03-01-2020', 1, 2, 1, 100, '0', 1000, 500, 50, 100, 1500, '5', '2020-01-03 12:08:37');
 
 -- --------------------------------------------------------
 
@@ -87,7 +96,9 @@ CREATE TABLE `bill_cycle` (
 --
 
 INSERT INTO `bill_cycle` (`bill_cycle_id`, `company_id`, `bill_cycle_name`, `bill_cycle_from`, `bill_cycle_to`, `bill_cycle_addedby`, `date`) VALUES
-(2, 3, 'Dec 2019', '01-12-2019', '31-12-2019', '5', '2019-12-25 12:10:42');
+(2, 1, 'Dec 2019', '01-12-2019', '31-12-2019', '5', '2020-01-03 12:52:54'),
+(3, 1, 'January 2020', '01-01-2020', '31-01-2020', NULL, '2020-01-03 12:53:00'),
+(5, 3, 'February 2020', '01-02-2020', '29-02-2020', '5', '2020-01-01 12:23:50');
 
 -- --------------------------------------------------------
 
@@ -110,7 +121,10 @@ CREATE TABLE `bill_paper` (
 
 INSERT INTO `bill_paper` (`bill_paper_id`, `bill_id`, `newspaper_info_id`, `newspaper_qty`, `amount`, `date`) VALUES
 (16, 5, 1, 10, 11, '2019-12-27 10:41:03'),
-(17, 5, 1, 20, 22, '2019-12-27 10:41:04');
+(17, 5, 1, 20, 22, '2019-12-27 10:41:04'),
+(18, 1, 1, 1, 500, '2019-12-29 05:17:29'),
+(21, 5, 1, 1, 300, '2020-01-03 12:08:37'),
+(22, 5, 1, 2, 200, '2020-01-03 12:08:38');
 
 -- --------------------------------------------------------
 
@@ -126,6 +140,14 @@ CREATE TABLE `bill_scheme` (
   `amount` double DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `bill_scheme`
+--
+
+INSERT INTO `bill_scheme` (`bill_scheme_id`, `bill_id`, `scheme_info_id`, `qty`, `amount`, `date`) VALUES
+(15, 5, 4, 1, 300, '2020-01-03 12:08:38'),
+(16, 5, 4, 2, 200, '2020-01-03 12:08:38');
 
 -- --------------------------------------------------------
 
@@ -155,6 +177,7 @@ CREATE TABLE `company` (
   `company_end_date` varchar(15) NOT NULL,
   `company_logo` varchar(200) NOT NULL,
   `company_imei` varchar(250) DEFAULT NULL,
+  `company_imei2` varchar(100) DEFAULT NULL,
   `company_status` varchar(100) NOT NULL DEFAULT 'Inactive',
   `company_reg_date` varchar(20) DEFAULT NULL,
   `admin_roll_id` int(11) NOT NULL DEFAULT 1,
@@ -165,9 +188,12 @@ CREATE TABLE `company` (
 -- Dumping data for table `company`
 --
 
-INSERT INTO `company` (`company_id`, `c_name`, `company_name`, `company_address`, `company_city`, `company_state`, `company_district`, `company_statecode`, `company_mob1`, `company_mob2`, `company_email`, `company_gpay_no`, `company_website`, `company_pan_no`, `company_gst_no`, `company_lic1`, `company_lic2`, `company_start_date`, `company_end_date`, `company_logo`, `company_imei`, `company_status`, `company_reg_date`, `admin_roll_id`, `date`) VALUES
-(3, 'dfgsdfg sdfg', 'Pudhari', 'Bhausingji Road  Karvir', 'kolhapur', 'Maharashtra', 'kolhapur', 27, '9876543210', '9876543210', 'root@gmail.com', '9876543210', 'abd.com', '124578', '1245678', '12457', '1245', '01-4-2019', '07-12-2019', '', '111', 'Active', '12-12-2019', 1, '2019-12-28 12:38:24'),
-(6, 'fsdgdfg', 'Demo Company', 'dfsgdfg', 'PUNE', 'Maharashtra', '', 0, '9988776655', '', 'demo1@mail.com', '', '', '5r67fh', '', 'dfgh', '', '', '', '', '111', 'Inactive', '28-12-2019', 1, '2019-12-28 12:44:44');
+INSERT INTO `company` (`company_id`, `c_name`, `company_name`, `company_address`, `company_city`, `company_state`, `company_district`, `company_statecode`, `company_mob1`, `company_mob2`, `company_email`, `company_gpay_no`, `company_website`, `company_pan_no`, `company_gst_no`, `company_lic1`, `company_lic2`, `company_start_date`, `company_end_date`, `company_logo`, `company_imei`, `company_imei2`, `company_status`, `company_reg_date`, `admin_roll_id`, `date`) VALUES
+(3, 'dfgsdfg sdfg', 'Pudhari', 'Bhausingji Road  Karvir', 'kolhapur', 'Maharashtra', 'kolhapur', 27, '9876543210', '9876543210', 'root@gmail.com', '9876543210', 'abd.com', '124578', '1245678', '12457', '1245', '01-4-2019', '07-12-2019', '', '111', NULL, 'Active', '12-12-2019', 1, '2019-12-28 12:38:24'),
+(6, 'fsdgdfg', 'Demo Company', 'dfsgdfg', 'PUNE', 'Maharashtra', '', 0, '9988776655', '', 'demo1@mail.com', '', '', '5r67fh', '', 'dfgh', '', '', '', '', '111', NULL, 'Inactive', '28-12-2019', 1, '2019-12-28 12:44:44'),
+(7, 'api up demo', 'up demo', 'rrr', 'kkk', 'mmm', '', 0, '9966332211', '9988774411', 'demo@www.com', '9955663322', '', '444', '', '555', '666', '', '', '', '777', '888', 'Inactive', NULL, 1, '2019-12-29 09:56:33'),
+(8, 'datta mhs', 'Api Demo', '', 'Kop', '', '', 0, '9988776655', '', '', NULL, '', '', '', '', '', '', '', '', '222', '333', 'Inactive', NULL, 1, '2019-12-29 10:03:26'),
+(9, 'datta mhs', 'Api Demo', '', 'Kop', '', '', 0, '9988776655', '', '', NULL, '', '', '', '', '', '', '', '', '222', '333', 'Inactive', NULL, 1, '2019-12-29 10:05:09');
 
 -- --------------------------------------------------------
 
@@ -194,6 +220,13 @@ CREATE TABLE `customer` (
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`customer_id`, `company_id`, `delivery_line_id`, `customer_name`, `customer_address`, `mobile`, `email`, `bill_send_sms`, `bill_send_email`, `delivery_charges`, `paperwise`, `opening_bal`, `advance`, `customer_status`, `customer_addedby`, `date`) VALUES
+(1, 3, 1, 'demo api', 'ghfgh', '8855870751', 'demo@eee.com', 'sms', '', 100, 'all', 1000, 500, 'active', '5', '2020-01-03 11:09:31');
+
 -- --------------------------------------------------------
 
 --
@@ -213,6 +246,14 @@ CREATE TABLE `customer_pdetails` (
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `customer_pdetails`
+--
+
+INSERT INTO `customer_pdetails` (`customer_pdetails_id`, `customer_id`, `company_id`, `papertype_id`, `newspaper_info_id`, `newspaper_qty`, `s_date`, `e_date`, `customer_addedby`, `date`) VALUES
+(1, 1, 3, 1, 1, 3, '11-11-2019', '11-12-2019', '5', '2020-01-03 12:14:10'),
+(2, 1, 3, 1, 1, 3, '11-10-2019', '11-11-2019', '5', '2020-01-03 12:14:10');
+
 -- --------------------------------------------------------
 
 --
@@ -231,6 +272,14 @@ CREATE TABLE `customer_schdetails` (
   `customer_addedby` varchar(50) DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `customer_schdetails`
+--
+
+INSERT INTO `customer_schdetails` (`customer_schdetails_id`, `customer_id`, `company_id`, `scheme_info_id`, `qty`, `sch_amount`, `s_date`, `e_date`, `customer_addedby`, `date`) VALUES
+(1, 1, 3, 4, '1', 300, '11-10-2019', '11-11-2019', '5', '2020-01-03 12:14:33'),
+(2, 1, 3, 4, '2', 0, '11-11-2019', '11-12-2019', '5', '2020-01-03 12:14:33');
 
 -- --------------------------------------------------------
 
@@ -255,7 +304,8 @@ CREATE TABLE `delivery_line` (
 
 INSERT INTO `delivery_line` (`delivery_line_id`, `company_id`, `delivery_line_name`, `liboy_id`, `collboy_id`, `delivery_line_status`, `delivery_line_addedby`, `date`) VALUES
 (1, 3, 'Rajarampuri', 4, 4, 'active', NULL, '2019-12-07 10:17:14'),
-(2, 3, 'Shahupuri', 1, 1, 'active', NULL, '2019-12-07 10:17:05');
+(2, 3, 'Shahupuri', 1, 1, 'active', NULL, '2019-12-07 10:17:05'),
+(4, 9, 'zzz', 3, 4, 'active', NULL, '2019-12-29 10:45:15');
 
 -- --------------------------------------------------------
 
@@ -280,7 +330,8 @@ CREATE TABLE `expense` (
 --
 
 INSERT INTO `expense` (`expense_id`, `company_id`, `expense_vc_no`, `expense_date`, `expense_type`, `expense_amount`, `expense_notes`, `expense_addedby`, `date`) VALUES
-(2, 3, 1, '01-12-2019', '3', 222, 'jklhjk', '5', '2019-12-28 06:38:08');
+(2, 3, 1, '01-12-2019', '3', 222, 'jklhjk', '5', '2019-12-28 06:38:08'),
+(4, 3, 2, '01-01-2020', '2', 1000, 'kdfghj dsklfghklsdfjg lkdfj', '5', '2020-01-01 11:40:13');
 
 -- --------------------------------------------------------
 
@@ -302,7 +353,8 @@ CREATE TABLE `expense_type` (
 
 INSERT INTO `expense_type` (`expense_type_id`, `company_id`, `expense_type_name`, `expense_type_addedby`, `date`) VALUES
 (2, 3, 'Asdfgh Jklpo', '5', '2019-12-28 06:00:15'),
-(3, 3, 'Zxcvb Nmlkj', '5', '2019-12-28 06:00:24');
+(3, 3, 'Zxcvb Nmlkj', '5', '2019-12-28 06:00:24'),
+(5, 3, 'qwer ert', '5', '2020-01-01 11:23:16');
 
 -- --------------------------------------------------------
 
@@ -352,8 +404,7 @@ CREATE TABLE `lineboy` (
 --
 
 INSERT INTO `lineboy` (`lineboy_id`, `company_id`, `lineboy_name`, `lineboy_address`, `mobile1`, `mobile2`, `password`, `salary`, `l_imei`, `is_lineboy`, `is_collectionboy`, `lineboy_status`, `lineboy_addedby`, `date`) VALUES
-(1, 3, 'Sumit Patil', 'Kolhapur', 9876543210, 9876543210, '123456', 1500, '555', 'yes', 'yes', 'active', NULL, '2019-12-28 11:30:20'),
-(4, 3, 'Abhijeet', 'panhala', 6543210214, 0, '123456', 4000, NULL, 'yes', 'yes', 'active', NULL, '2019-12-07 07:53:15');
+(1, 3, 'Sumit Patil', 'Kolhapur', 9876543210, 9876543210, '123456', 1500, '555', 'yes', 'yes', 'active', NULL, '2019-12-28 11:30:20');
 
 -- --------------------------------------------------------
 
@@ -426,7 +477,8 @@ CREATE TABLE `purchase` (
 --
 
 INSERT INTO `purchase` (`purchase_id`, `company_id`, `purchase_vc_no`, `purchase_date`, `supplier_id`, `newspaper_info_id`, `purchase_qty`, `purchase_tot_amt`, `purchase_pay_amt`, `purchase_out_amt`, `purchase_note`, `purchase_addedby`, `date`) VALUES
-(2, 3, 1, '01-12-2019', 2, 1, 200, 800, 500, 300, 'dfgdfgdfg', '5', '2019-12-28 06:33:56');
+(2, 3, 1, '01-12-2019', 2, 1, 200, 800, 500, 300, 'dfgdfgdfg', '5', '2019-12-28 06:33:56'),
+(7, 3, 3, '01-01-2020', 1, 2, 100, 1000, 300, 700, 'ghjghj fjhfgjh', '6', '2020-01-01 11:57:46');
 
 -- --------------------------------------------------------
 
@@ -440,7 +492,7 @@ CREATE TABLE `receipt` (
   `receipt_no` bigint(20) NOT NULL,
   `receipt_date` varchar(20) DEFAULT NULL,
   `delivery_line_id` int(11) DEFAULT NULL,
-  `customer_id` int(11) DEFAULT NULL,
+  `customer_id` bigint(11) DEFAULT NULL,
   `out_amount` double DEFAULT NULL,
   `rec_amount` double DEFAULT NULL,
   `pay_mode` varchar(100) DEFAULT NULL,
@@ -458,8 +510,8 @@ CREATE TABLE `receipt` (
 --
 
 INSERT INTO `receipt` (`receipt_id`, `company_id`, `receipt_no`, `receipt_date`, `delivery_line_id`, `customer_id`, `out_amount`, `rec_amount`, `pay_mode`, `cheque_no`, `cheque_date`, `cheque_amt`, `receipt_ref_no`, `receipt_note`, `receipt_addedby`, `date`) VALUES
-(1, 3, 1, '02-12-2019', 2, 1, 1000, 200, 'Cheque', 22, '03-12-2019', 5000, '222', 'hjkghjkghk', '5', '2019-12-27 10:43:59'),
-(3, 3, 2, '03-12-2019', 2, 1, 600, 100, 'Cash', 0, '', 0, '111', 'fasdfasdf', '5', '2019-12-27 10:53:47');
+(1, 3, 1, '01-12-2019', 1, 1, 1150, 550, 'Cash', 0, '', 0, '', 'dhfgh dfghdfgh', '5', '2019-12-29 05:17:50'),
+(4, 3, 3, '03-01-2020', 1, 1, 3, 4, 'Cash', 5, '03-01-2020', 6, '7', 'gvhfgh', '5', '2020-01-03 05:36:54');
 
 -- --------------------------------------------------------
 
@@ -551,6 +603,8 @@ CREATE TABLE `user` (
   `user_city` varchar(150) NOT NULL,
   `user_email` varchar(250) NOT NULL,
   `user_mobile` varchar(12) NOT NULL,
+  `user_imei` varchar(250) DEFAULT NULL,
+  `user_otp` varchar(20) DEFAULT NULL,
   `user_password` varchar(100) NOT NULL,
   `user_status` varchar(20) NOT NULL DEFAULT 'active',
   `user_addedby` varchar(100) NOT NULL,
@@ -562,9 +616,10 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `company_id`, `roll_id`, `user_name`, `user_city`, `user_email`, `user_mobile`, `user_password`, `user_status`, `user_addedby`, `user_date`, `is_admin`) VALUES
-(5, 3, 1, 'Admin', 'Kolhapur', 'demo@mail.com', '9876543210', '123456', 'active', 'Admin', '2019-12-28 10:43:29', 1),
-(9, 6, 1, 'Admin', 'PUNE', 'admin@demo.com', '9988776655', '123456', 'active', 'Admin', '2019-12-28 12:24:35', 1);
+INSERT INTO `user` (`user_id`, `company_id`, `roll_id`, `user_name`, `user_city`, `user_email`, `user_mobile`, `user_imei`, `user_otp`, `user_password`, `user_status`, `user_addedby`, `user_date`, `is_admin`) VALUES
+(5, 3, 1, 'Admin', 'Kolhapur', 'demo@mail.com', '9876543210', NULL, NULL, '123456', 'active', 'Admin', '2019-12-28 10:43:29', 1),
+(9, 6, 1, 'Admin', 'PUNE', 'admin@demo.com', '9988776655', NULL, NULL, '123456', 'active', 'Admin', '2019-12-28 12:24:35', 1),
+(10, 9, 1, 'datta mhs', 'Kop', '', '9988776644', '222', '926466', '123456', 'active', '', '2019-12-29 10:26:54', 0);
 
 --
 -- Indexes for dumped tables
@@ -679,7 +734,8 @@ ALTER TABLE `purchase`
 -- Indexes for table `receipt`
 --
 ALTER TABLE `receipt`
-  ADD PRIMARY KEY (`receipt_id`);
+  ADD PRIMARY KEY (`receipt_id`),
+  ADD KEY `receipt_ibfk_1` (`customer_id`);
 
 --
 -- Indexes for table `scheme_info`
@@ -719,67 +775,67 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `bill_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `bill_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `bill_cycle`
 --
 ALTER TABLE `bill_cycle`
-  MODIFY `bill_cycle_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `bill_cycle_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `bill_paper`
 --
 ALTER TABLE `bill_paper`
-  MODIFY `bill_paper_id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `bill_paper_id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `bill_scheme`
 --
 ALTER TABLE `bill_scheme`
-  MODIFY `bill_scheme_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `bill_scheme_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `company`
 --
 ALTER TABLE `company`
-  MODIFY `company_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `company_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `customer_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `customer_pdetails`
 --
 ALTER TABLE `customer_pdetails`
-  MODIFY `customer_pdetails_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `customer_pdetails_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `customer_schdetails`
 --
 ALTER TABLE `customer_schdetails`
-  MODIFY `customer_schdetails_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `customer_schdetails_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `delivery_line`
 --
 ALTER TABLE `delivery_line`
-  MODIFY `delivery_line_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `delivery_line_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `expense`
 --
 ALTER TABLE `expense`
-  MODIFY `expense_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `expense_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `expense_type`
 --
 ALTER TABLE `expense_type`
-  MODIFY `expense_type_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `expense_type_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `language`
@@ -791,13 +847,13 @@ ALTER TABLE `language`
 -- AUTO_INCREMENT for table `lineboy`
 --
 ALTER TABLE `lineboy`
-  MODIFY `lineboy_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `lineboy_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `newspaper_info`
 --
 ALTER TABLE `newspaper_info`
-  MODIFY `newspaper_info_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `newspaper_info_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `papertype`
@@ -809,19 +865,19 @@ ALTER TABLE `papertype`
 -- AUTO_INCREMENT for table `purchase`
 --
 ALTER TABLE `purchase`
-  MODIFY `purchase_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `purchase_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `receipt`
 --
 ALTER TABLE `receipt`
-  MODIFY `receipt_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `receipt_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `scheme_info`
 --
 ALTER TABLE `scheme_info`
-  MODIFY `scheme_info_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `scheme_info_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `scheme_type`
@@ -833,13 +889,13 @@ ALTER TABLE `scheme_type`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `supplier_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `supplier_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
@@ -862,6 +918,12 @@ ALTER TABLE `customer_pdetails`
 --
 ALTER TABLE `customer_schdetails`
   ADD CONSTRAINT `customer_schdetails_ibfk_1` FOREIGN KEY (`scheme_info_id`) REFERENCES `scheme_info` (`scheme_info_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `receipt`
+--
+ALTER TABLE `receipt`
+  ADD CONSTRAINT `receipt_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

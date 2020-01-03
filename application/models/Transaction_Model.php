@@ -134,5 +134,25 @@ class Transaction_Model extends CI_Model{
     $result = $query->result();
     return $result;
   }
+
+  public function check_bill_cycle($company_id,$bill_cycle_from,$bill_cycle_to){
+    $this->db->select('*');
+    $this->db->from('bill_cycle');
+    $this->db->where('company_id',$company_id);
+    $this->db->where('bill_cycle_from',$bill_cycle_from);
+    $this->db->where('bill_cycle_to',$bill_cycle_to);
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result;
+  }
+
+  public function get_customer_by_delivery_line($delivery_line_id){
+    $this->db->select('*');
+    $this->db->from('delivery_line');
+    $this->db->where('delivery_line_id',$delivery_line_id);
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
 }
 ?>

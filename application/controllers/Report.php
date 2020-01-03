@@ -69,6 +69,19 @@ class Report extends CI_Controller{
     $data['customer_address'] = $receipt_details[0]['customer_address'];
     $this->load->view('Report/receipt',$data);
   }
+
+  public function sale_report(){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Report/sale_report');
+    $this->load->view('Include/footer');
+
+  }
 }
 
 ?>
