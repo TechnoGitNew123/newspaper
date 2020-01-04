@@ -186,6 +186,7 @@ class Newspaper_API extends CI_Controller{
     $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 		echo str_replace('\\/','/',$json_response);
   }
+  
 /************************ Lineboy ***************************/
   // Save Lineboy...
   public function save_lineboy(){
