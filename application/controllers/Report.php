@@ -70,17 +70,130 @@ class Report extends CI_Controller{
     $this->load->view('Report/receipt',$data);
   }
 
-  public function sale_report(){
+/************************** Report ******************************/
+
+  // Customer Summary...
+  // public function get_outstanding_amt($customer_id,$from_date){
+  //   $cust_info = $this->User_Model->get_info_array('customer_id', $customer_id, 'customer');
+  //   $opening_bal = $cust_info[0]['opening_bal'];
+  //   $advance = $cust_info[0]['advance'];
+  //   $tot_bill = $this->Transaction_Model->cust_total_bill($customer_id, $from_date);
+  //   $from_date2 = date("Y-m-d h:i:s", strtotime($from_date));
+  //   $tot_sceme_amt = $this->Transaction_Model->cust_tot_sceme_amt($customer_id, $from_date2);
+  //   $tot_received = $this->Transaction_Model->cust_tot_received($customer_id, $from_date);
+  //   $out_amount = ($tot_bill + $opening_bal + $tot_sceme_amt) - ($tot_received + $advance);
+  //   return $out_amount;
+  // }
+
+  public function customer_report(){
     $user_id = $this->session->userdata('user_id');
     $company_id = $this->session->userdata('company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
+    $this->form_validation->set_rules('to_date', 'To Date', 'trim|required');
+    if($this->form_validation->run() != FALSE){
+      $from_date = $this->input->post('from_date');
+      $to_date = $this->input->post('to_date');
+      $delivery_line_id = $this->input->post('delivery_line_id');
+      $customer_id = $this->input->post('customer_id');
+      $data['from_date'] = $from_date;
+      $data['to_date'] = $to_date;
+      $data['delivery_line_id'] = $delivery_line_id;
+      $data['customer_id'] = $customer_id;
+      if($customer_id == ''){
+        $data['report_type'] = 'customer_wise';
+      } else{
+        $data['report_type'] = 'customer_detail';
+        $data['cust_bill_report'] = $this->Report_Model->cust_bill_report($from_date,$to_date,$customer_id);
+        $data['cust_receipt_report'] = $this->Report_Model->cust_receipt_report($from_date,$to_date,$customer_id);
+        // $data['customer_report'] = $this->Report_Model->customer_report($from_date,$to_date,$customer_id);
+      }
 
-    $this->load->view('Include/head');
-    $this->load->view('Include/navbar');
-    $this->load->view('Report/sale_report');
-    $this->load->view('Include/footer');
+    }
+    $data['delivery_line'] = $this->User_Model->get_list($company_id,'delivery_line_id','ASC','delivery_line');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Report/customer_report',$data);
+    $this->load->view('Include/footer',$data);
+  }
+  // Purchase Summary...
+  public function purchase_report(){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
+    $this->form_validation->set_rules('to_date', 'To Date', 'trim|required');
+    if($this->form_validation->run() != FALSE){
+      $from_date = $this->input->post('from_date');
+      $to_date = $this->input->post('to_date');
+      $supplier_id = $this->input->post('supplier_id');
+      $data['from_date'] = $from_date;
+      $data['to_date'] = $to_date;
+      $data['supplier_id'] = $supplier_id;
+      if($supplier_id == ''){
+        $data['report_type'] = 'all_purchase';
+        // $data['all_purchase_report'] = $this->Report_Model->all_purchase_report($from_date,$to_date,$supplier_id);
+      } else{
+        $data['report_type'] = 'supplier_purchase';
+        $data['supplier_purchase_report'] = $this->Report_Model->all_purchase_report($from_date,$to_date,$supplier_id);
+        // $data['customer_report'] = $this->Report_Model->customer_report($from_date,$to_date,$customer_id);
+      }
 
+    }
+    $data['supplier_list'] = $this->User_Model->get_list($company_id,'supplier_id','ASC','supplier');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Report/purchase_report',$data);
+    $this->load->view('Include/footer',$data);
+  }
+  // Expense Summary...
+  public function expense_report(){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
+    $this->form_validation->set_rules('to_date', 'To Date', 'trim|required');
+    if($this->form_validation->run() != FALSE){
+      $from_date = $this->input->post('from_date');
+      $to_date = $this->input->post('to_date');
+      $expense_type_id = $this->input->post('expense_type_id');
+      $data['from_date'] = $from_date;
+      $data['to_date'] = $to_date;
+      $data['expense_type_id'] = $expense_type_id;
+      $data['expense_report'] = $this->Report_Model->expense_report($from_date,$to_date,$expense_type_id);
+    }
+    $data['expense_type'] = $this->User_Model->get_list($company_id,'expense_type_id','ASC','expense_type');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Report/expense_report',$data);
+    $this->load->view('Include/footer',$data);
+  }
+  // Receipt Summary...
+  public function receipt_report(){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
+    $this->form_validation->set_rules('to_date', 'To Date', 'trim|required');
+    if($this->form_validation->run() != FALSE){
+      $from_date = $this->input->post('from_date');
+      $to_date = $this->input->post('to_date');
+      $delivery_line_id = $this->input->post('delivery_line_id');
+      $data['from_date'] = $from_date;
+      $data['to_date'] = $to_date;
+      $data['delivery_line_id'] = $delivery_line_id;
+      $data['receipt_report'] = $this->Report_Model->receipt_report($from_date,$to_date,$delivery_line_id);
+      // print_r($data['receipt_report']);
+    }
+    $data['delivery_line'] = $this->User_Model->get_list($company_id,'delivery_line_id','ASC','delivery_line');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Report/receipt_report',$data);
+    $this->load->view('Include/footer',$data);
   }
 }
 

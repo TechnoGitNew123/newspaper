@@ -645,7 +645,6 @@ public function delete_lineboy($id){
         $this->load->view('Include/navbar',$data);
         $this->load->view('User/customer_info_list',$data);
         $this->load->view('Include/footer',$data);
-
       }
 
       public function save_customer(){

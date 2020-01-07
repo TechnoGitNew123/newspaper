@@ -87,8 +87,12 @@ class Transaction_Model extends CI_Model{
   public function get_cust_by_delivery_line($company_id,$delivery_line_id){
     $this->db->select('*');
     $this->db->from('customer');
-    $this->db->where('company_id',$company_id);
-    $this->db->where('delivery_line_id',$delivery_line_id);
+    if($company_id != ''){
+      $this->db->where('company_id',$company_id);
+    }
+    if($delivery_line_id != ''){
+      $this->db->where('delivery_line_id',$delivery_line_id);
+    }
     $query = $this->db->get();
     // $q = $this->db->last_query();
     $result = $query->result();
@@ -148,11 +152,65 @@ class Transaction_Model extends CI_Model{
 
   public function get_customer_by_delivery_line($delivery_line_id){
     $this->db->select('*');
-    $this->db->from('delivery_line');
-    $this->db->where('delivery_line_id',$delivery_line_id);
+    $this->db->from('customer');
+    if($delivery_line_id != ''){
+      $this->db->where('delivery_line_id',$delivery_line_id);
+    }
     $query = $this->db->get();
     $result = $query->result();
     return $result;
+  }
+
+  // Used in get_supplier_outstanding_amount & Add Payment..
+  public function get_supplier_purchase_amount($supplier_id,$from_date,$to_date){
+    $this->db->select('SUM(purchase_tot_amt) as purchase_tot_amt');
+    $this->db->from('purchase');
+    if($supplier_id != ''){
+    $this->db->where('supplier_id',$supplier_id);
+    }
+    if($from_date != '' && $to_date == ''){
+      $this->db->where("str_to_date(purchase_date,'%d-%m-%Y')  < str_to_date('$from_date','%d-%m-%Y')");
+    }
+    if($from_date != '' && $to_date != ''){
+      $this->db->where("str_to_date(purchase_date,'%d-%m-%Y')  BETWEEN str_to_date('$from_date','%d-%m-%Y') AND str_to_date('$to_date','%d-%m-%Y')");
+    }
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result[0]['purchase_tot_amt'];
+  }
+
+  public function get_supplier_purchase_pay_amount($supplier_id,$from_date,$to_date){
+    $this->db->select('SUM(purchase_pay_amt) as purchase_pay_amt');
+    $this->db->from('purchase');
+    if($supplier_id != ''){
+    $this->db->where('supplier_id',$supplier_id);
+    }
+    if($from_date != '' && $to_date == ''){
+      $this->db->where("str_to_date(purchase_date,'%d-%m-%Y')  < str_to_date('$from_date','%d-%m-%Y')");
+    }
+    if($from_date != '' && $to_date != ''){
+      $this->db->where("str_to_date(purchase_date,'%d-%m-%Y')  BETWEEN str_to_date('$from_date','%d-%m-%Y') AND str_to_date('$to_date','%d-%m-%Y')");
+    }
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result[0]['purchase_pay_amt'];
+  }
+
+  public function get_supplier_payment_amount($supplier_id,$from_date,$to_date){
+    $this->db->select('SUM(paid_amount) as paid_amount');
+    $this->db->from('payment');
+    if($supplier_id != ''){
+    $this->db->where('supplier_id',$supplier_id);
+    }
+    if($from_date != '' && $to_date == ''){
+      $this->db->where("str_to_date(payment_date,'%d-%m-%Y')  < str_to_date('$from_date','%d-%m-%Y')");
+    }
+    if($from_date != '' && $to_date != ''){
+      $this->db->where("str_to_date(payment_date,'%d-%m-%Y')  BETWEEN str_to_date('$from_date','%d-%m-%Y') AND str_to_date('$to_date','%d-%m-%Y')");
+    }
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result[0]['paid_amount'];
   }
 }
 ?>

@@ -16,7 +16,7 @@ $page = "party_list";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>Bill Information</h4>
+            <h4>Payment Information</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -30,9 +30,9 @@ $page = "party_list";
             <!-- general form elements -->
             <div class="card">
             <div class="card-header">
-              <h3 class="card-title"><i class="fa fa-list"></i>Bill Information</h3>
+              <h3 class="card-title"><i class="fa fa-list"></i>Payment Information</h3>
               <div class="card-tools">
-                <a href="<?php echo base_url() ?>Transaction/add_bill" class="btn btn-sm btn-block btn-primary">Add Bill</a>
+                <a href="<?php echo base_url() ?>Transaction/add_payment" class="btn btn-sm btn-block btn-primary">Add Payment</a>
               </div>
             </div>
             <!-- /.card-header -->
@@ -41,28 +41,29 @@ $page = "party_list";
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Bill Cycle</th>
+                  <th>Payment No.</th>
                   <th>Date</th>
-                  <th>Customer</th>
-                  <th>Total Amount</th>
+                  <th>Supplier Name</th>
+                  <th>Amount</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <?php $i = 0;
-                  foreach ($bill_list as $list) {
+                  foreach ($payment_list as $list) {
                     $i++;
+
+                    $sup_data = $this->User_Model->get_info_array('supplier_id', $list->supplier_id, 'supplier');
                   ?>
                   <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo $list->bill_cycle_name; ?></td>
-                    <td><?php echo $list->bill_date; ?></td>
-                    <td><?php echo $list->customer_name; ?></td>
-                    <td><?php echo $list->tot_net_amt; ?></td>
+                    <td><?php echo $list->payment_no; ?></td>
+                    <td><?php echo $list->payment_date; ?></td>
+                    <td><?php echo $sup_data[0]['supplier_name']; ?></td>
+                    <td><?php echo $list->paid_amount; ?></td>
                     <td>
-                      <a href="<?php echo base_url(); ?>Transaction/edit_bill/<?php echo $list->bill_id; ?>"> <i class="fa fa-edit"></i> </a>
-                      <a class="ml-2" target="_blank" href="<?php echo base_url(); ?>Report/bill/<?php echo $list->bill_id; ?>"> <i class="fa fa-print"></i> </a>
-                      <a class="ml-2" href="<?php echo base_url(); ?>Transaction/delete_bill/<?php echo $list->bill_id; ?>" onclick="return confirm('Delete this Bill');"> <i class="fa fa-trash"></i> </a>
+                      <a href="<?php echo base_url(); ?>Transaction/edit_payment/<?php echo $list->payment_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <a class="ml-2" href="<?php echo base_url(); ?>Transaction/delete_payment/<?php echo $list->payment_id; ?>" onclick="return confirm('Delete this Payment');"> <i class="fa fa-trash"></i> </a>
                     </td>
                   </tr>
                 <?php } ?>

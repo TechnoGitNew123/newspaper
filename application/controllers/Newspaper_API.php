@@ -20,36 +20,47 @@ class Newspaper_API extends CI_Controller{
     $user_password = $_REQUEST['password'];
     $company_imei = $_REQUEST['imei_no1'];
     $company_imei2 = $_REQUEST['imei_no2'];
+    $company_id = '';
 
-    $company_data = array(
-      'c_name' => $c_name,
-      'company_name' => $company_name,
-      'company_city' => $company_city,
-      'company_mob1' => $company_mob1,
-      'company_imei' => $company_imei,
-      'company_imei2' => $company_imei2,
-    );
-    $com_save = $this->User_Model->save_data('company', $company_data);
-    $user_data = array(
-      'user_name' => $c_name,
-      'user_city' => $company_city,
-      'user_mobile' => $company_mob1,
-      'user_password' => $user_password,
-      'user_imei' => $company_imei,
-      'company_id' => $com_save,
-    );
-    $user_save = $this->User_Model->save_data('user', $user_data);
-    if($com_save && $user_save){
-      $otp = mt_rand(100000, 999999);
-      $up_otp['user_otp'] = $otp;
-      $this->User_Model->update_info('user_id', $user_save, 'user', $up_otp);
 
-      $response["status"] = TRUE;
-  		$response["msg"] = "Registered Successful";
-    } else{
+    $check = $this->User_Model->check_duplication($company_id,$company_mob1,'user_mobile','user');
+    // $check_imei = $this->User_Model->check_duplication($company_id,$company_imei,'user_imei','user');
+    // if($check || $check_imei){
+    if($check){
       $response["status"] = FALSE;
-  		$response["msg"] = "Registration Failed";
+      $response["msg"] = "Mobile Number or IMEI Exist";
+    } else{
+      $company_data = array(
+        'c_name' => $c_name,
+        'company_name' => $company_name,
+        'company_city' => $company_city,
+        'company_mob1' => $company_mob1,
+        'company_imei' => $company_imei,
+        'company_imei2' => $company_imei2,
+      );
+      $com_save = $this->User_Model->save_data('company', $company_data);
+      $user_data = array(
+        'user_name' => $c_name,
+        'user_city' => $company_city,
+        'user_mobile' => $company_mob1,
+        'user_password' => $user_password,
+        'user_imei' => $company_imei,
+        'company_id' => $com_save,
+      );
+      $user_save = $this->User_Model->save_data('user', $user_data);
+      if($com_save && $user_save){
+        $otp = mt_rand(100000, 999999);
+        $up_otp['user_otp'] = $otp;
+        $this->User_Model->update_info('user_id', $user_save, 'user', $up_otp);
+
+        $response["status"] = TRUE;
+    		$response["msg"] = "Registered Successful";
+      } else{
+        $response["status"] = FALSE;
+    		$response["msg"] = "Registration Failed";
+      }
     }
+
 		$json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 		echo str_replace('\\/','/',$json_response);
   }
@@ -186,7 +197,7 @@ class Newspaper_API extends CI_Controller{
     $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 		echo str_replace('\\/','/',$json_response);
   }
-  
+
 /************************ Lineboy ***************************/
   // Save Lineboy...
   public function save_lineboy(){
@@ -650,7 +661,8 @@ class Newspaper_API extends CI_Controller{
     $save_data['purchase_qty'] = $_REQUEST['purchase_qty'];
     $save_data['purchase_tot_amt'] = $_REQUEST['purchase_tot_amt'];
     $save_data['purchase_pay_amt'] = $_REQUEST['purchase_pay_amt'];
-    $save_data['purchase_out_amt'] = $_REQUEST['purchase_out_amt'];
+    $save_data['return_qty'] = $_REQUEST['return_qty'];
+    // $save_data['purchase_out_amt'] = $_REQUEST['purchase_out_amt'];
     $save_data['purchase_note'] = $_REQUEST['purchase_note'];
     $save_data['purchase_addedby'] = $_REQUEST['user_id'];
 
@@ -687,7 +699,7 @@ class Newspaper_API extends CI_Controller{
     $update_data['purchase_qty'] = $_REQUEST['purchase_qty'];
     $update_data['purchase_tot_amt'] = $_REQUEST['purchase_tot_amt'];
     $update_data['purchase_pay_amt'] = $_REQUEST['purchase_pay_amt'];
-    $update_data['purchase_out_amt'] = $_REQUEST['purchase_out_amt'];
+    $update_data['return_qty'] = $_REQUEST['return_qty'];
     $update_data['purchase_note'] = $_REQUEST['purchase_note'];
     $update_data['purchase_addedby'] = $_REQUEST['user_id'];
 
@@ -1139,8 +1151,6 @@ class Newspaper_API extends CI_Controller{
       $response["msg"] = "Bill Not Saved";
     }
 
-
-
     $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     echo str_replace('\\/','/',$json_response);
   }
@@ -1216,6 +1226,92 @@ class Newspaper_API extends CI_Controller{
     $this->User_Model->delete_info('bill_id', $bill_id, 'bill');
     $response["status"] = TRUE;
     $response["msg"] = "Bill Deleted Successfully";
+    $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    echo str_replace('\\/','/',$json_response);
+  }
+
+/************************ Payment ***********************/
+  public function get_supplier_outstanding_amount(){
+    $supplier_id = $_REQUEST['supplier_id'];
+    $from_date = '';
+    $to_date = '';
+    $tot_purchase_amount = $this->Transaction_Model->get_supplier_purchase_amount($supplier_id,$from_date,$to_date);
+    $tot_purchase_pay_amount = $this->Transaction_Model->get_supplier_purchase_pay_amount($supplier_id,$from_date,$to_date);
+    $tot_payment = $this->Transaction_Model->get_supplier_payment_amount($supplier_id,$from_date,$to_date);
+    $outstanding_amount = $tot_purchase_amount - ($tot_purchase_pay_amount + $tot_payment);
+    // echo $outstanding_amount;
+    $response["status"] = TRUE;
+    $response["outstanding_amount"] = $outstanding_amount;
+    $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    echo str_replace('\\/','/',$json_response);
+  }
+  // Save Payment...
+  public function save_payment(){
+    $save_data['company_id'] = $_REQUEST['company_id'];
+    $save_data['payment_no'] = $this->Transaction_Model->get_count_no($save_data['company_id'], 'payment_no', 'payment');
+    $save_data['payment_date'] = $_REQUEST['payment_date'];
+    $save_data['supplier_id'] = $_REQUEST['supplier_id'];
+    $save_data['out_amount'] = $_REQUEST['out_amount'];
+    $save_data['paid_amount'] = $_REQUEST['paid_amount'];
+    $save_data['pay_mode'] = $_REQUEST['pay_mode'];
+    $save_data['cheque_no'] = $_REQUEST['cheque_no'];
+    $save_data['cheque_date'] = $_REQUEST['cheque_date'];
+    $save_data['cheque_amt'] = $_REQUEST['cheque_amt'];
+    $save_data['payment_ref_no'] = $_REQUEST['payment_ref_no'];
+    $save_data['payment_note'] = $_REQUEST['payment_note'];
+    $save_data['payment_addedby'] = $_REQUEST['user_id'];
+    $this->User_Model->save_data('payment', $save_data);
+
+    $response["status"] = TRUE;
+    $response["msg"] = "Payment Saved Successfully";
+    $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    echo str_replace('\\/','/',$json_response);
+  }
+  // Payment List...
+  public function payment_list(){
+    $company_id = $_REQUEST['company_id'];
+    $payment = $this->API_Model->get_list($company_id,'payment_id','ASC','payment');
+    $response["status"] = TRUE;
+    $response["payment_list"] = $payment;
+    $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    echo str_replace('\\/','/',$json_response);
+  }
+  // Payment Details...
+  public function payment_details(){
+    $payment_id = $_REQUEST['payment_id'];
+    $payment_details = $this->API_Model->get_info_array('payment_id', $payment_id, 'payment');
+    $response["status"] = TRUE;
+    $response["payment_details"] = $payment_details;
+    $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    echo str_replace('\\/','/',$json_response);
+  }
+  // Update Payment...
+  public function update_payment(){
+    $payment_id = $_REQUEST['payment_id'];
+    $update_data['payment_date'] = $_REQUEST['payment_date'];
+    $update_data['supplier_id'] = $_REQUEST['supplier_id'];
+    $update_data['out_amount'] = $_REQUEST['out_amount'];
+    $update_data['paid_amount'] = $_REQUEST['paid_amount'];
+    $update_data['pay_mode'] = $_REQUEST['pay_mode'];
+    $update_data['cheque_no'] = $_REQUEST['cheque_no'];
+    $update_data['cheque_date'] = $_REQUEST['cheque_date'];
+    $update_data['cheque_amt'] = $_REQUEST['cheque_amt'];
+    $update_data['payment_ref_no'] = $_REQUEST['payment_ref_no'];
+    $update_data['payment_note'] = $_REQUEST['payment_note'];
+    $update_data['payment_addedby'] = $_REQUEST['user_id'];
+
+    $update = $this->User_Model->update_info('payment_id', $payment_id, 'payment', $update_data);
+    $response["status"] = TRUE;
+    $response["msg"] = "Payment Updated Successfully";
+    $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    echo str_replace('\\/','/',$json_response);
+  }
+  // Delete Receipt...
+  public function delete_payment(){
+    $payment_id = $_REQUEST['payment_id'];
+    $this->User_Model->delete_info('payment_id', $payment_id, 'payment');
+    $response["status"] = TRUE;
+    $response["msg"] = "Receipt Deleted Successfully";
     $json_response = json_encode($response,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     echo str_replace('\\/','/',$json_response);
   }

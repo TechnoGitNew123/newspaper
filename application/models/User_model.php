@@ -86,11 +86,13 @@ class User_Model extends CI_Model{
   }
 
   public function check_duplication($company_id,$value,$field_name,$table_name){
-    $query = $this->db->select($field_name)
-      ->where('company_id', $company_id)
-      ->where($field_name,$value)
-      ->from($table_name)
-      ->get();
+    $this->db->select($field_name);
+    if($company_id != ''){
+      $this->db->where('company_id', $company_id);
+    }    
+    $this->db->where($field_name,$value);
+    $this->db->from($table_name);
+    $query = $this->db->get();
     $result = $query->result();
     return $result;
   }

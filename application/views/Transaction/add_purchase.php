@@ -29,10 +29,10 @@
               <form role="form" method="post" autocomplete="off">
                 <div class="card-body row">
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control"  name="purchase_vc_no" id="purchase_vc_no" value="<?php if(isset($purchase_vc_no)){ echo $purchase_vc_no; } ?>" title="Vc No." placeholder="Vc No." readonly required>
+                    <input type="text" class="form-control form-control-sm"  name="purchase_vc_no" id="purchase_vc_no" value="<?php if(isset($purchase_vc_no)){ echo $purchase_vc_no; } ?>" title="Vc No." placeholder="Vc No." readonly required>
                   </div>
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control"  name="purchase_date"  id="date1" data-target="#date1" data-toggle="datetimepicker" value="<?php if(isset($purchase_date)){ echo $purchase_date; } ?>" title="Date" placeholder="Date" required>
+                    <input type="text" class="form-control form-control-sm"  name="purchase_date"  id="date1" data-target="#date1" data-toggle="datetimepicker" value="<?php if(isset($purchase_date)){ echo $purchase_date; } ?>" title="Date" placeholder="Date" required>
                   </div>
                   <div class="form-group col-md-12">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select Supplier" name="supplier_id" id="supplier_id" title="Select supplier" style="width: 100%;">
@@ -52,19 +52,19 @@
                     </select>
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control"  name="purchase_qty" id="purchase_qty" value="<?php if(isset($purchase_qty)){ echo $purchase_qty; } ?>" title="Enter Qty" placeholder="Enter Qty">
+                    <input type="number" class="form-control form-control-sm"  name="purchase_qty" id="purchase_qty" value="<?php if(isset($purchase_qty)){ echo $purchase_qty; } ?>" title="Enter Qty" placeholder="Enter Qty">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control"  name="purchase_tot_amt" id="purchase_tot_amt" value="<?php if(isset($purchase_tot_amt)){ echo $purchase_tot_amt; } ?>" title="Total Amount" placeholder="Total Amount">
+                    <input type="number" class="form-control form-control-sm"  name="return_qty" id="return_qty" value="<?php if(isset($return_qty)){ echo $return_qty; } ?>" title="Return Qty" placeholder="Return Qty">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control"  name="purchase_pay_amt" id="purchase_pay_amt" value="<?php if(isset($purchase_pay_amt)){ echo $purchase_pay_amt; } ?>" title="Enter Payment amount" placeholder="Enter Payment amount">
+                    <input type="number" class="form-control form-control-sm"  name="purchase_tot_amt" id="purchase_tot_amt" value="<?php if(isset($purchase_tot_amt)){ echo $purchase_tot_amt; } ?>" title="Total Amount" placeholder="Total Amount">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control"  name="purchase_out_amt" id="purchase_out_amt" value="<?php if(isset($purchase_out_amt)){ echo $purchase_out_amt; } ?>" title="Total Outstanding" placeholder="Total Outstanding">
+                    <input type="number" class="form-control form-control-sm"  name="purchase_pay_amt" id="purchase_pay_amt" value="<?php if(isset($purchase_pay_amt)){ echo $purchase_pay_amt; } ?>" title="Enter Payment amount" placeholder="Enter Payment amount">
                   </div>
                   <div class="form-group col-md-12">
-                    <textarea name="purchase_note" id="purchase_note" rows="3"  class="form-control" cols="" title="Aditional Notes" placeholder="Aditional Notes"><?php if(isset($purchase_note)){ echo $purchase_note; } ?></textarea>
+                    <textarea name="purchase_note" id="purchase_note" rows="3"  class="form-control form-control-sm" cols="" title="Aditional Notes" placeholder="Aditional Notes"><?php if(isset($purchase_note)){ echo $purchase_note; } ?></textarea>
                   </div>
                 </div>
                 <!-- /.card-body -->

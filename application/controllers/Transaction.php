@@ -123,9 +123,9 @@ class Transaction extends CI_Controller{
         'supplier_id' => $this->input->post('supplier_id'),
         'newspaper_info_id' => $this->input->post('newspaper_info_id'),
         'purchase_qty' => $this->input->post('purchase_qty'),
+        'return_qty' => $this->input->post('return_qty'),
         'purchase_tot_amt' => $this->input->post('purchase_tot_amt'),
         'purchase_pay_amt' => $this->input->post('purchase_pay_amt'),
-        'purchase_out_amt' => $this->input->post('purchase_out_amt'),
         'purchase_note' => $this->input->post('purchase_note'),
         'purchase_addedby' => $user_id,
       );
@@ -157,9 +157,9 @@ class Transaction extends CI_Controller{
         'supplier_id' => $this->input->post('supplier_id'),
         'newspaper_info_id' => $this->input->post('newspaper_info_id'),
         'purchase_qty' => $this->input->post('purchase_qty'),
+        'return_qty' => $this->input->post('return_qty'),
         'purchase_tot_amt' => $this->input->post('purchase_tot_amt'),
         'purchase_pay_amt' => $this->input->post('purchase_pay_amt'),
-        'purchase_out_amt' => $this->input->post('purchase_out_amt'),
         'purchase_note' => $this->input->post('purchase_note'),
         'purchase_addedby' => $user_id,
       );
@@ -176,9 +176,9 @@ class Transaction extends CI_Controller{
     $data['supplier_id'] = $purchase_details[0]['supplier_id'];
     $data['newspaper_info_id'] = $purchase_details[0]['newspaper_info_id'];
     $data['purchase_qty'] = $purchase_details[0]['purchase_qty'];
+    $data['return_qty'] = $purchase_details[0]['return_qty'];
     $data['purchase_tot_amt'] = $purchase_details[0]['purchase_tot_amt'];
     $data['purchase_pay_amt'] = $purchase_details[0]['purchase_pay_amt'];
-    $data['purchase_out_amt'] = $purchase_details[0]['purchase_out_amt'];
     $data['purchase_note'] = $purchase_details[0]['purchase_note'];
     $data['supplier_list'] = $this->User_Model->get_list($company_id,'supplier_id','ASC','supplier');
     $data['newspaper_list'] = $this->User_Model->get_list($company_id,'newspaper_info_id','ASC','newspaper_info');
@@ -567,7 +567,7 @@ class Transaction extends CI_Controller{
     $this->load->view('Transaction/add_receipt',$data);
     $this->load->view('Include/footer',$data);
   }
-
+  // Delete...
   public function delete_receipt($receipt_id){
     $user_id = $this->session->userdata('user_id');
     $company_id = $this->session->userdata('company_id');
@@ -576,6 +576,236 @@ class Transaction extends CI_Controller{
     $this->User_Model->delete_info('receipt_id', $receipt_id, 'receipt');
     header('location:'.base_url().'Transaction/receipt_list');
   }
+
+/************************** Payment Entry ************************/
+// Payment Entry List...
+  public function payment_list(){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $data['payment_list'] = $this->User_Model->get_list($company_id,'payment_id','ASC','payment');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Transaction/list_payment',$data);
+    $this->load->view('Include/footer',$data);
+  }
+  // Add Payment Entry...
+  public function add_payment(){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('payment_no', 'payment_no', 'trim|required');
+    $this->form_validation->set_rules('payment_date', 'payment_date', 'trim|required');
+    if ($this->form_validation->run() != FALSE) {
+      $save_data = array(
+        'company_id' => $company_id,
+        'payment_no' => $this->input->post('payment_no'),
+        'payment_date' => $this->input->post('payment_date'),
+        'supplier_id' => $this->input->post('supplier_id'),
+        'out_amount' => $this->input->post('out_amount'),
+        'paid_amount' => $this->input->post('paid_amount'),
+        'pay_mode' => $this->input->post('pay_mode'),
+        'cheque_no' => $this->input->post('cheque_no'),
+        'cheque_date' => $this->input->post('cheque_date'),
+        'cheque_amt' => $this->input->post('cheque_amt'),
+        'payment_ref_no' => $this->input->post('payment_ref_no'),
+        'payment_note' => $this->input->post('payment_note'),
+        'payment_addedby' => $user_id,
+      );
+      $bill_id = $this->User_Model->save_data('payment', $save_data);
+      header('location:'.base_url().'Transaction/payment_list');
+    }
+
+    $data['payment_no'] = $this->Transaction_Model->get_count_no($company_id, 'payment_no', 'payment');
+    $data['supplier_list'] = $this->User_Model->get_list($company_id,'supplier_id','ASC','supplier');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Transaction/add_payment',$data);
+    $this->load->view('Include/footer',$data);
+  }
+  // Edit Payment Entry...
+  public function edit_payment($payment_id){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+
+    $this->form_validation->set_rules('payment_no', 'payment_no', 'trim|required');
+    $this->form_validation->set_rules('payment_date', 'payment_date', 'trim|required');
+    if ($this->form_validation->run() != FALSE) {
+      $update_data = array(
+        'payment_date' => $this->input->post('payment_date'),
+        'supplier_id' => $this->input->post('supplier_id'),
+        'out_amount' => $this->input->post('out_amount'),
+        'paid_amount' => $this->input->post('paid_amount'),
+        'pay_mode' => $this->input->post('pay_mode'),
+        'cheque_no' => $this->input->post('cheque_no'),
+        'cheque_date' => $this->input->post('cheque_date'),
+        'cheque_amt' => $this->input->post('cheque_amt'),
+        'payment_ref_no' => $this->input->post('payment_ref_no'),
+        'payment_note' => $this->input->post('payment_note'),
+        'payment_addedby' => $user_id,
+      );
+      $this->User_Model->update_info('payment_id', $payment_id, 'payment', $update_data);
+      header('location:'.base_url().'Transaction/payment_list');
+    }
+
+    $payment_details = $this->User_Model->get_info_array('payment_id', $payment_id, 'payment');
+    if($payment_details == ''){ header('location:'.base_url().'Transaction/payment_list'); }
+    $data['update'] = 'update';
+    $data['payment_no'] = $payment_details[0]['payment_no'];
+    $data['payment_date'] = $payment_details[0]['payment_date'];
+    $data['supplier_id'] = $payment_details[0]['supplier_id'];
+    $data['out_amount'] = $payment_details[0]['out_amount'];
+    $data['paid_amount'] = $payment_details[0]['paid_amount'];
+    $data['pay_mode'] = $payment_details[0]['pay_mode'];
+    $data['cheque_no'] = $payment_details[0]['cheque_no'];
+    $data['cheque_date'] = $payment_details[0]['cheque_date'];
+    $data['cheque_amt'] = $payment_details[0]['cheque_amt'];
+    $data['payment_ref_no'] = $payment_details[0]['payment_ref_no'];
+    $data['payment_note'] = $payment_details[0]['payment_note'];
+
+
+    $data['supplier_list'] = $this->User_Model->get_list($company_id,'supplier_id','ASC','supplier');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Transaction/add_payment',$data);
+    $this->load->view('Include/footer',$data);
+  }
+  // Delete Payment Entry...
+  public function delete_payment($payment_id){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $this->User_Model->delete_info('payment_id', $payment_id, 'payment');
+    header('location:'.base_url().'Transaction/payment_list');
+  }
+
+  public function get_supplier_outstanding_amount(){
+    $supplier_id = $this->input->post('supplier_id');
+    $from_date = '';
+    $to_date = '';
+    $tot_purchase_amount = $this->Transaction_Model->get_supplier_purchase_amount($supplier_id,$from_date,$to_date);
+    $tot_purchase_pay_amount = $this->Transaction_Model->get_supplier_purchase_pay_amount($supplier_id,$from_date,$to_date);
+    $tot_payment = $this->Transaction_Model->get_supplier_payment_amount($supplier_id,$from_date,$to_date);
+    $outstanding_amount = $tot_purchase_amount - ($tot_purchase_pay_amount + $tot_payment);
+    echo $outstanding_amount;
+  }
+
+
+
+/********************************* Gift Entry **************************/
+
+// Gift Entry List...
+  public function gift_entry_list(){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $data['gift_entry_list'] = $this->User_Model->get_list($company_id,'gift_entry_id','ASC','gift_entry');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Transaction/list_gift_entry',$data);
+    $this->load->view('Include/footer',$data);
+  }
+  // Add Gift Entry...
+  public function add_gift_entry(){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('gift_entry_no', 'gift_entry_no', 'trim|required');
+    $this->form_validation->set_rules('gift_entry_date', 'gift_entry_date', 'trim|required');
+    if ($this->form_validation->run() != FALSE) {
+      $save_data = array(
+        'company_id' => $company_id,
+        'gift_entry_no' => $this->input->post('gift_entry_no'),
+        'gift_entry_date' => $this->input->post('gift_entry_date'),
+        'supplier_id' => $this->input->post('supplier_id'),
+        'out_amount' => $this->input->post('out_amount'),
+        'paid_amount' => $this->input->post('paid_amount'),
+        'pay_mode' => $this->input->post('pay_mode'),
+        'cheque_no' => $this->input->post('cheque_no'),
+        'cheque_date' => $this->input->post('cheque_date'),
+        'cheque_amt' => $this->input->post('cheque_amt'),
+        'gift_entry_ref_no' => $this->input->post('gift_entry_ref_no'),
+        'gift_entry_note' => $this->input->post('gift_entry_note'),
+        'gift_entry_addedby' => $user_id,
+      );
+      $bill_id = $this->User_Model->save_data('gift_entry', $save_data);
+      header('location:'.base_url().'Transaction/gift_entry_list');
+    }
+
+    $data['gift_entry_no'] = $this->Transaction_Model->get_count_no($company_id, 'gift_entry_no', 'gift_entry');
+    $data['supplier_list'] = $this->User_Model->get_list($company_id,'supplier_id','ASC','supplier');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Transaction/add_gift_entry',$data);
+    $this->load->view('Include/footer',$data);
+  }
+  // Edit Gift Entry...
+  public function edit_gift_entry($gift_entry_id){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+
+    $this->form_validation->set_rules('gift_entry_no', 'gift_entry_no', 'trim|required');
+    $this->form_validation->set_rules('gift_entry_date', 'gift_entry_date', 'trim|required');
+    if ($this->form_validation->run() != FALSE) {
+      $update_data = array(
+        'gift_entry_date' => $this->input->post('gift_entry_date'),
+        'supplier_id' => $this->input->post('supplier_id'),
+        'out_amount' => $this->input->post('out_amount'),
+        'paid_amount' => $this->input->post('paid_amount'),
+        'pay_mode' => $this->input->post('pay_mode'),
+        'cheque_no' => $this->input->post('cheque_no'),
+        'cheque_date' => $this->input->post('cheque_date'),
+        'cheque_amt' => $this->input->post('cheque_amt'),
+        'gift_entry_ref_no' => $this->input->post('gift_entry_ref_no'),
+        'gift_entry_note' => $this->input->post('gift_entry_note'),
+        'gift_entry_addedby' => $user_id,
+      );
+      $this->User_Model->update_info('gift_entry_id', $gift_entry_id, 'gift_entry', $update_data);
+      header('location:'.base_url().'Transaction/gift_entry_list');
+    }
+
+    $gift_entry_details = $this->User_Model->get_info_array('gift_entry_id', $gift_entry_id, 'gift_entry');
+    if($gift_entry_details == ''){ header('location:'.base_url().'Transaction/gift_entry_list'); }
+    $data['update'] = 'update';
+    $data['gift_entry_no'] = $gift_entry_details[0]['gift_entry_no'];
+    $data['gift_entry_date'] = $gift_entry_details[0]['gift_entry_date'];
+    $data['supplier_id'] = $gift_entry_details[0]['supplier_id'];
+    $data['out_amount'] = $gift_entry_details[0]['out_amount'];
+    $data['paid_amount'] = $gift_entry_details[0]['paid_amount'];
+    $data['pay_mode'] = $gift_entry_details[0]['pay_mode'];
+    $data['cheque_no'] = $gift_entry_details[0]['cheque_no'];
+    $data['cheque_date'] = $gift_entry_details[0]['cheque_date'];
+    $data['cheque_amt'] = $gift_entry_details[0]['cheque_amt'];
+    $data['gift_entry_ref_no'] = $gift_entry_details[0]['gift_entry_ref_no'];
+    $data['gift_entry_note'] = $gift_entry_details[0]['gift_entry_note'];
+
+
+    $data['supplier_list'] = $this->User_Model->get_list($company_id,'supplier_id','ASC','supplier');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Transaction/add_gift_entry',$data);
+    $this->load->view('Include/footer',$data);
+  }
+  // Delete Gift Entry...
+  public function delete_gift_entry($gift_entry_id){
+    $user_id = $this->session->userdata('user_id');
+    $company_id = $this->session->userdata('company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id==null && $company_id == null ){ header('location:'.base_url().'User'); }
+    $this->User_Model->delete_info('gift_entry_id', $gift_entry_id, 'gift_entry');
+    header('location:'.base_url().'Transaction/gift_entry_list');
+  }
+
+/*********************************************************************************************/
 
   public function get_cust_by_delivery_line(){
     $company_id = $this->session->userdata('company_id');
